@@ -1,0 +1,122 @@
+getgenv().config = {
+    rageEnabled = true,
+    killRange = 8000 -- 감지 범위 (스터드)
+}
+
+local getservice, findfirstchild, findfirstchildofclass, waitforchild = game.GetService, game.FindFirstChild, game.FindFirstChildOfClass, game.WaitForChild
+local players, replicatedstorage, runservice = getservice(game, "Players"), getservice(game, "ReplicatedStorage"), getservice(game, "RunService")
+local localplayer = players.LocalPlayer
+local heartbeat = runservice.Heartbeat
+
+-- Fall Damage 제거
+do
+    local FDMG = replicatedstorage:WaitForChild("ACS_Engine"):WaitForChild("Events"):FindFirstChild("FDMG")
+    if FDMG then FDMG:Destroy() end
+end
+
+local folders = {}
+folders.BulletFireSystem = waitforchild(replicatedstorage, "BulletFireSystem")
+folders.Configurations = waitforchild(replicatedstorage, "Configurations")
+folders.ACS_Guns = waitforchild(folders.Configurations, "ACS_Guns")
+
+local events = {}
+events.BulletHit = waitforchild(folders.BulletFireSystem, "BulletHit")
+events.FireGun = waitforchild(folders.BulletFireSystem, "FireGun")
+
+local utils = {}
+function utils.desyncTo(localRootPart, targetPart)
+    if getgenv().desyncing then 
+        getgenv().desyncing:Disconnect() 
+        getgenv().desyncing = nil 
+    end
+    getgenv().desyncing = runservice.Heartbeat:Connect(function()
+        if not localRootPart or not targetPart then return end
+        localRootPart.CFrame = targetPart.CFrame - Vector3.new(0, 10, 0)
+        sethiddenproperty(localRootPart, "PhysicsRepRootPart", targetPart)
+    end)
+end
+
+-- 기존 killbot 제거
+if getgenv().killbot then 
+    getgenv().killbot:Disconnect() 
+    getgenv().killbot = nil 
+end
+
+getgenv().killbot = heartbeat:Connect(function()
+    if not getgenv().config.rageEnabled then return end
+
+    local localchar = localplayer.Character
+    if not localchar then return end
+
+    local localbackpack = localplayer:FindFirstChildOfClass("Backpack")
+    local tool = localbackpack and localbackpack:FindFirstChildOfClass("Tool")
+    if tool then tool.Parent = localchar end
+
+    local gun = localchar:FindFirstChildOfClass("Tool")
+    if not gun then return end
+
+    local gunfolder = folders.ACS_Guns:FindFirstChild(gun.Name)
+    if not gunfolder then return end
+
+    local settingsScript = gunfolder:FindFirstChild("Settings")
+    if not settingsScript then return end
+    local settings = require(settingsScript)
+
+    local me = {}
+    me.humanoid = localchar:FindFirstChildOfClass("Humanoid")
+    me.rootpart = me.humanoid and me.humanoid.RootPart
+    if not me.rootpart then return end
+
+    local targets = {}
+
+    -- 8000 스터드 이내 모든 적 수집
+    for _, player in ipairs(players:GetPlayers()) do
+        if player == localplayer then continue end
+        local char = player.Character
+        if not char then continue end
+        if char:FindFirstChildOfClass("ForceField") then continue end
+
+        local head = char:FindFirstChild("Head")
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
+        local rootpart = humanoid and humanoid.RootPart
+
+        if head and rootpart then
+            local distance = (me.rootpart.Position - rootpart.Position).Magnitude
+            if distance <= getgenv().config.killRange then
+                table.insert(targets, {
+                    head = head,
+                    rootpart = rootpart,
+                    player = player
+                })
+            end
+        end
+    end
+
+    -- 타겟이 있으면 모두 처리
+    if #targets > 0 then
+        for _, target in ipairs(targets) do
+            -- desync (마지막 타겟 기준으로 desync)
+            utils.desyncTo(me.rootpart, target.rootpart)
+
+            local hitpos = target.head.Position
+
+            -- 총 발사 & 히트 강제
+            events.FireGun:FireServer({ hitpos }, gun, localchar:FindFirstChild("S"..gun.Name), hitpos, false)
+            events.BulletHit:FireServer(
+                gun, 
+                target.head, 
+                hitpos, 
+                {{ hitpos, hitpos, math.huge }, { hitpos, hitpos, math.huge }}, 
+                hitpos, 
+                { 
+                    FireRate = settings.FireRate, 
+                    MaxSpread = settings.MaxSpread, 
+                    Mode = settings.Mode, 
+                    MaxRecoilPower = settings.MaxRecoilPower, 
+                    Distance = settings.Distance, 
+                    BSpeed = settings.BSpeed 
+                }
+            )
+        end
+    end
+end)
