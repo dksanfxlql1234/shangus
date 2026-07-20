@@ -1,0 +1,4189 @@
+-- Script Path: game:GetService("Workspace").olfaxs.ACS_Client
+-- Took 2.42s to decompile.
+-- Executor: Madium (1.3.8.0)
+
+-- https://lua.expert/
+local Players = game:GetService("Players")
+
+game:GetService("RunService")
+
+local RunService, UserInputService, DebrisGobbler, HapticService, CurrentCamera, LocalPlayer, v7, v8, Events, Config, bulletShells, HelicopterNames, PlaneNames, UAVNames, v13, v14, Character, Humanoid, v16, v17, v28, t2, v33, v38, v39, v40, v41, v44, v45, v48, v50, v52, v53, v54, v55, v56, v57, v68, Humanoid2, HumanoidRootPart, t3, t4, t6, v72, v73, v74, PreventFallDamageBindableEvent, vibrateController, ResetWorkspace, Update_Gui, Unset, v97, fireGun, changeFireMode, swapGunScope
+
+do
+    local TweenService = game:GetService("TweenService")
+    local Workspace = game:GetService("Workspace")
+
+    RunService = game:GetService("RunService")
+
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+    UserInputService = game:GetService("UserInputService")
+
+    local RiotShield = require(script:WaitForChild("RiotShield"))
+
+    DebrisGobbler = require(ReplicatedStorage:WaitForChild("DebrisGobbler"))
+    HapticService = game:GetService("HapticService")
+
+    local GamepadService = game:GetService("GamepadService")
+    local Tables = require(ReplicatedStorage:WaitForChild("Modules"):WaitForChild("Tables"))
+    local CamoTextures = Tables.CamoTextures
+
+    CurrentCamera = Workspace.CurrentCamera
+
+    local Main = game:GetService("SoundService"):WaitForChild("Main")
+    local CameraMaxZoomDistance = game:GetService("StarterPlayer").CameraMaxZoomDistance
+    local Terrain = Workspace.Terrain
+
+    LocalPlayer = game:GetService("Players").LocalPlayer
+
+    repeat
+        task.wait(0.05)
+    until LocalPlayer.Character
+
+    local v1 = UDim2.new()
+    local v2 = UDim2.new()
+    local v3 = UDim2.new()
+    local v4 = UDim2.new()
+    local v5 = require(script:WaitForChild("Startup")).Initialize()
+    local v6 = nil
+
+    v7 = nil
+    v8 = nil
+
+    local ACS_Engine = ReplicatedStorage:WaitForChild("ACS_Engine")
+
+    Events = ACS_Engine:WaitForChild("Events")
+
+    local GunModels = ACS_Engine:WaitForChild("GunModels")
+    local Utilities = require(ACS_Engine:WaitForChild("Modules"):WaitForChild("Utilities"))
+    local SetupModule = require(ACS_Engine:WaitForChild("Modules"):WaitForChild("SetupModule"))
+    local Hitmarker = require(ReplicatedStorage:WaitForChild("Modules"):WaitForChild("Hitmarker"))
+    local Spring = require(ACS_Engine:WaitForChild("Modules"):WaitForChild("Spring"))
+
+    Config = require(ACS_Engine.ServerConfigs:WaitForChild("Config"))
+
+    local ACS_WorkSpace = Workspace:WaitForChild("Game Systems"):WaitForChild("ACS_WorkSpace")
+    local ACS_Guns = ReplicatedStorage.Configurations.ACS_Guns
+
+    bulletShells = LocalPlayer:WaitForChild("SettingsFolder"):WaitForChild("bulletShells")
+
+    local objectHitmarker = LocalPlayer:WaitForChild("SettingsFolder"):WaitForChild("objectHitmarker")
+    local v9 = require(ReplicatedStorage:WaitForChild("Modules"):WaitForChild("Gun Sounds"))
+    local soundDistances = v9.soundDistances
+    local CreateSound = v9.CreateSound
+    local ChangeSensitivity = require(script:WaitForChild("Sensitivity")).ChangeSensitivity
+    local SniperFocus = require(script:WaitForChild("SniperFocus"))
+
+    require(ReplicatedStorage:WaitForChild("BulletFireSystem"):WaitForChild("DamageDisplay"))
+    HelicopterNames = Tables.HelicopterNames
+    PlaneNames = Tables.PlaneNames
+    UAVNames = Tables.UAVNames
+
+    local v10 = nil
+    local v11 = TweenInfo.new(0.3)
+    local HUD = LocalPlayer.PlayerGui:WaitForChild("UI"):WaitForChild("Container"):WaitForChild("HUD"):WaitForChild("Menu"):WaitForChild("HUD")
+    local t = {
+        Left = HUD:WaitForChild("Left").Position,
+        Right = HUD:WaitForChild("Right").Position
+    }
+
+    _G.GunEquipped = false
+
+    local v12 = nil
+
+    v13 = nil
+    v14 = nil
+    LocalPlayer.CameraMode = Enum.CameraMode.Classic
+    Character = LocalPlayer.Character
+    Humanoid = Character:WaitForChild("Humanoid")
+
+    local v15 = LocalPlayer:GetMouse()
+
+    v16 = false
+    v17 = false
+
+    local Stances = Character:WaitForChild("Saude"):WaitForChild("Stances")
+    local Correndo = Stances:WaitForChild("Correndo")
+    local v18 = CFrame.new()
+    local v19 = nil
+    local v20 = nil
+    local v21 = nil
+    local v22 = nil
+    local v23 = nil
+    local v24 = nil
+    local v25 = nil
+    local v26 = nil
+    local v27 = nil
+
+    v28 = nil
+
+    local v29 = nil
+    local v30 = 1
+
+    t2 = {}
+
+    local v31 = false
+    local v32 = time()
+
+    v33 = nil
+
+    local v34 = ACS_Engine:WaitForChild("HUD"):WaitForChild("StatusUI"):Clone()
+
+    v34.Parent = LocalPlayer.PlayerGui
+
+    local v35 = nil
+    local Crosshair = v34:WaitForChild("Crosshair")
+    local v36 = 1
+    local v37 = 0
+
+    v38 = false
+    v39 = false
+    v40 = true
+    v41 = false
+
+    local v42 = false
+    local v43 = false
+
+    v44 = nil
+    v45 = nil
+
+    local v46 = nil
+    local v47 = nil
+
+    v48 = false
+
+    local v49 = false
+
+    v50 = false
+
+    local v51 = 0
+
+    v52 = nil
+    v53 = nil
+    v54 = nil
+    v55 = nil
+    v56 = nil
+    v57 = nil
+
+    local v58 = nil
+    local v59 = nil
+    local v60 = tick()
+    local v61 = nil
+    local v62 = tick()
+    local v63 = 0
+    local v64 = Spring.new((Vector3.new()))
+    local v65 = Spring.new((Vector3.new()))
+    local v66 = Spring.new((Vector3.new()))
+    local v67 = 1
+
+    v68 = UserInputService:GetLastInputType()
+    v66.s = 10
+    v66.d = 1
+    v64.s = 10
+    v64.d = 0.15
+    v65.s = 10
+    v65.d = 1
+
+    local v69 = 0.25
+    local v70 = CFrame.new()
+
+    Humanoid2 = Character:WaitForChild("Humanoid")
+
+    local Torso = Character:WaitForChild("Torso")
+
+    HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+
+    local Neck = Torso:WaitForChild("Neck")
+
+    t3 = {}
+    t4 = {}
+
+    local v71 = nil
+    local Server = ACS_WorkSpace:FindFirstChild("Server")
+    local Client = ACS_WorkSpace:FindFirstChild("Client")
+    local t5 = {
+        Ignorable = true,
+        Ignore = true,
+        Seat1 = true,
+        Seat2 = true,
+        Seat3 = true,
+        Seat4 = true,
+        Seat5 = true,
+        Seat6 = true,
+        DriveSeat = true,
+        Armor = true,
+        EShield = true,
+        FL = true,
+        FR = true,
+        BB = true,
+        BR = true,
+        BL = true,
+        Light = true,
+        Gradient = true,
+        AntiHelicopterField = true,
+        HelicopterKillField = true
+    }
+
+    t6 = { "RPG", "Javelin", "Stinger", "Grenade Launcher" }
+
+    local t7 = { Character, Server, CurrentCamera, Client }
+
+    if LocalPlayer.Team.Name ~= "Loading" then
+        CurrentCamera.CameraType = Enum.CameraType.Custom
+        CurrentCamera.CameraSubject = Humanoid2
+        task.spawn(function() --[[ Line: 206 | Upvalues: Workspace (copy), LocalPlayer (copy), CurrentCamera (copy), CameraMaxZoomDistance (copy), UserInputService (copy) ]]
+            if Workspace:WaitForChild("Tycoon"):WaitForChild("Tycoons"):WaitForChild(LocalPlayer.Team.Name):WaitForChild("Loaded").Value ~= false then
+                CurrentCamera.FieldOfView = 70
+                LocalPlayer.CameraMaxZoomDistance = CameraMaxZoomDistance
+                LocalPlayer.CameraMinZoomDistance = 0.5
+                UserInputService.ModalEnabled = false
+            end
+        end)
+    end
+
+    local t8 = {
+        AimHide = TweenService:Create(v34.Effects.Aim, TweenInfo.new(0.3), {
+            ImageTransparency = 1
+        }),
+        AimShow = TweenService:Create(v34.Effects.Aim, TweenInfo.new(0.75), {
+            ImageTransparency = 0
+        }),
+        CrosshairHide = {
+            TweenService:Create(Crosshair:WaitForChild("Up"), TweenInfo.new(0.2, Enum.EasingStyle.Linear), {
+                BackgroundTransparency = 1
+            }),
+            TweenService:Create(Crosshair:WaitForChild("Down"), TweenInfo.new(0.2, Enum.EasingStyle.Linear), {
+                BackgroundTransparency = 1
+            }),
+            TweenService:Create(Crosshair:WaitForChild("Left"), TweenInfo.new(0.2, Enum.EasingStyle.Linear), {
+                BackgroundTransparency = 1
+            }),
+            TweenService:Create(Crosshair:WaitForChild("Right"), TweenInfo.new(0.2, Enum.EasingStyle.Linear), {
+                BackgroundTransparency = 1
+            }),
+            TweenService:Create(Crosshair:WaitForChild("Center"), TweenInfo.new(0.2, Enum.EasingStyle.Linear), {
+                ImageTransparency = 1
+            })
+        },
+        CrosshairShow = {
+            TweenService:Create(Crosshair.Up, TweenInfo.new(0.2, Enum.EasingStyle.Linear), {
+                BackgroundTransparency = 0
+            }),
+            TweenService:Create(Crosshair.Down, TweenInfo.new(0.2, Enum.EasingStyle.Linear), {
+                BackgroundTransparency = 0
+            }),
+            TweenService:Create(Crosshair.Left, TweenInfo.new(0.2, Enum.EasingStyle.Linear), {
+                BackgroundTransparency = 0
+            }),
+            TweenService:Create(Crosshair.Right, TweenInfo.new(0.2, Enum.EasingStyle.Linear), {
+                BackgroundTransparency = 0
+            }),
+            TweenService:Create(Crosshair.Center, TweenInfo.new(0.2, Enum.EasingStyle.Linear), {
+                ImageTransparency = 0
+            })
+        }
+    }
+
+    UserInputService.MouseIconEnabled = true
+    v72 = nil
+    v73 = false
+    v74 = false
+
+    for v75, v76 in GunModels:GetChildren() do
+        for v77, v78 in v76:GetDescendants() do
+            if v78.Name == "GlassLense" and v78:IsA("BasePart") then
+                v78:SetAttribute("OGTransparency", v78.Transparency)
+
+                for v79, v80 in v78.Parent:GetDescendants() do
+                    if v80:IsA("Decal") and (v80.Name ~= "SecondaryCamo" and v80.Name ~= "PrimaryCamo") then
+                        v80.Transparency = 1
+
+                        continue
+                    end
+
+                    if v80:IsA("ImageLabel") then
+                        v80.ImageTransparency = 1
+                    end
+                end
+            end
+        end
+    end
+
+    for v81, v82 in ReplicatedStorage:WaitForChild("Attachments System"):WaitForChild("Attachments"):WaitForChild("Scopes"):GetChildren() do
+        for v83, v84 in v82:GetDescendants() do
+            if v84.Name == "GlassLense" and v84:IsA("BasePart") then
+                v84:SetAttribute("OGTransparency", v84.Transparency)
+
+                for v85, v86 in v84.Parent:GetDescendants() do
+                    if v86:IsA("Decal") and (v86.Name ~= "SecondaryCamo" and v86.Name ~= "PrimaryCamo") then
+                        v86.Transparency = 1
+
+                        continue
+                    end
+
+                    if v86:IsA("ImageLabel") then
+                        v86.ImageTransparency = 1
+                    end
+                end
+            end
+        end
+    end
+
+    PreventFallDamageBindableEvent = Instance.new("BindableEvent")
+    PreventFallDamageBindableEvent.Name = "PreventFallDamageBindableEvent"
+    PreventFallDamageBindableEvent.Parent = Character
+    vibrateController = function(p1, p2, p3, p4) --[[ vibrateController | Line: 324 | Upvalues: v73 (ref), HapticService (copy) ]]
+        if not (v73 and p1) then
+            return
+        end
+
+        HapticService:SetMotor(p1.UserInputType, p2, p3)
+        task.wait((math.clamp(p4, 0, 0.2)))
+        HapticService:SetMotor(p1.UserInputType, p2, 0)
+    end
+    ResetWorkspace = function() --[[ ResetWorkspace | Line: 332 | Upvalues: Server (copy), Client (copy), Terrain (copy) ]]
+        Server:ClearAllChildren()
+        Client:ClearAllChildren()
+
+        for v1, v2 in Terrain:GetChildren() do
+            if v2.Name ~= "Clouds" then
+                v2:Destroy()
+            end
+        end
+    end
+    Character:GetAttributeChangedSignal("Wingsuit"):Connect(function() --[[ Line: 342 | Upvalues: v43 (ref), Character (copy) ]]
+        v43 = Character:GetAttribute("Wingsuit")
+    end)
+    ResetWorkspace()
+    Events.Hit.OnClientEvent:Connect(function(p1, p2, p3, p4, p5) --[[ Line: 348 | Upvalues: LocalPlayer (copy), Hitmarker (copy) ]]
+        if p1 == LocalPlayer then
+            return
+        end
+
+        Hitmarker.HitEffect(p2, p3, p4, p5, LocalPlayer)
+    end)
+    Events.HeadRot.OnClientEvent:Connect(function(p1, p2) --[[ Line: 354 | Upvalues: v68 (ref), LocalPlayer (copy) ]]
+        if v68 == Enum.UserInputType.Touch then
+            return
+        end
+
+        if not p1 or p1 == LocalPlayer then
+            return
+        end
+
+        if not (p1.Character and p1.Character:FindFirstChild("Head")) then
+            return
+        end
+
+        if not p1.Character:FindFirstChild("HumanoidRootPart") or p1.Character.HumanoidRootPart.Anchored == true then
+            return
+        end
+
+        local Neck = p1.Character.Torso:FindFirstChild("Neck")
+
+        if not Neck then
+            return
+        end
+
+        local C1 = Neck.C1
+
+        for i = 0, 1, 0.07 do
+            Neck.C1 = C1:Lerp(p2, i)
+            task.wait()
+        end
+    end)
+    Events.SubToHeadrot:FireServer()
+    Events.ServerGunAnim.OnClientEvent:Connect(function(p1, p2, p3, p4) --[[ Line: 388 | Upvalues: LocalPlayer (copy), Character (copy), soundDistances (copy), CurrentCamera (copy), CreateSound (copy), CamoTextures (copy), TweenService (copy) ]]
+        if p1 == LocalPlayer then
+            return
+        end
+
+        if not (p1.Character:FindFirstChild("S" .. p4.Name) and p1.Character["S" .. p4.Name]:FindFirstChild("Handle")) then
+            return
+        end
+
+        pcall(function() --[[ Line: 397 | Upvalues: p4 (copy), Character (ref), p1 (copy), soundDistances (ref), CurrentCamera (ref), CreateSound (ref) ]]
+            if p4.Parent == nil or p4.Parent:FindFirstChild("S" .. p4.Name) == nil then
+                return
+            end
+
+            local v1 = p4.Parent:FindFirstChild("S" .. p4.Name)
+
+            if not v1 then
+                return
+            end
+
+            local Magnitude = (Character.Torso.Position - p1.Character.Torso.Position).Magnitude
+
+            if v1:FindFirstChild("Suppressor") then
+                if not (soundDistances.Suppressed.EchoMax + 40 < Magnitude) or CurrentCamera.CameraType == Enum.CameraType.Scriptable then
+                    CreateSound(p4, p4.Parent.Torso, "Suppressed", "Server")
+                end
+            elseif not (soundDistances.Normal.EchoMax + 50 < Magnitude) or CurrentCamera.CameraType == Enum.CameraType.Scriptable then
+                CreateSound(p4, p4.Parent.Torso, "Normal", "Server")
+            end
+        end)
+
+        if p1.Character:FindFirstChild("S" .. p4.Name) ~= nil and p1.Character["S" .. p4.Name]:FindFirstChild("SmokePart") ~= nil then
+            local SmokePart = p1.Character["S" .. p4.Name]:FindFirstChild("SmokePart")
+            local v1 = SmokePart:FindFirstChild("FlashFX[Flash]")
+            local Smoke = SmokePart:FindFirstChild("Smoke")
+
+            if not (v1 and Smoke) then
+                return
+            end
+
+            local v2 = p1:FindFirstChild("Attachments"):FindFirstChild(p4.Name)
+            local t = {}
+            local v3 = if v2 then v2:GetAttribute("VFXUsing") else v2
+
+            if v3 then
+                local v4 = v2:GetAttribute("Camo" .. v3)
+
+                if v4 then
+                    t = CamoTextures[v4].CustomVFX or {}
+                end
+            end
+
+            if v1 and t.FlashColor then
+                v1.Color = t.FlashColor
+            elseif v1 then
+                v1.Color = ColorSequence.new(Color3.new(1, 1, 0.498039), Color3.new(1, 0.333333, 0))
+            end
+
+            if Smoke and t.SmokeColor then
+                Smoke.Color = t.SmokeColor
+            elseif Smoke then
+                Smoke.Color = ColorSequence.new(Color3.new(255/255, 255/255, 255/255))
+            end
+
+            if p1.Character["S" .. p4.Name]:FindFirstChild("Flash Hider") then
+                v1.Rate = 150
+            elseif SmokePart:FindFirstChild("FlashFX[Flash]") then
+                v1.Rate = 1000
+            end
+
+            v1.Enabled = true
+            Smoke.Enabled = true
+            task.delay(0.03333333333333333, function() --[[ Line: 476 | Upvalues: SmokePart (copy), v1 (copy), Smoke (copy) ]]
+                if SmokePart and (SmokePart:FindFirstChild("FlashFX[Flash]") and SmokePart:FindFirstChild("Smoke")) then
+                    v1.Enabled = false
+                    Smoke.Enabled = false
+                end
+            end)
+        end
+
+        if p1.Character:FindFirstChild("AnimBase") == nil or not p1.Character.AnimBase:FindFirstChild("AnimBaseW") then
+            return
+        end
+
+        local AnimBaseW = p1.Character:WaitForChild("AnimBase"):WaitForChild("AnimBaseW")
+
+        TweenService:Create(AnimBaseW, TweenInfo.new(p2), {
+            C1 = p3.ShootPos
+        }):Play()
+        task.wait(p2 * 2)
+        TweenService:Create(AnimBaseW, TweenInfo.new(0.2), {
+            C1 = CFrame.new()
+        }):Play()
+    end)
+
+    local function tweenFoV(p1, p2) --[[ tweenFoV | Line: 497 | Upvalues: v61 (ref), v68 (ref), ChangeSensitivity (copy), CurrentCamera (copy) ]]
+        task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), p2 (copy), v68 (ref), p1 (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+            v61 = if v61 then v61 + 1 or 0 else 0
+
+            local v22 = v61
+            local v32 = tick()
+            local v42 = p2 / 90
+            local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+            ChangeSensitivity((math.clamp((math.tan(math.rad(p1) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+            repeat
+                if v61 ~= v22 then
+                    break
+                end
+
+                local v92 = tick() - v32
+
+                CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (p1 - CurrentCamera.FieldOfView) * (v92 / v42)
+                task.wait()
+            until v42 < v92
+        end)
+    end
+
+    Update_Gui = function(p1) --[[ Update_Gui | Line: 528 | Upvalues: v13 (ref), v33 (ref), v8 (ref), v7 (ref), t2 (copy), v28 (ref), UserInputService (copy), v68 (ref), v50 (ref) ]]
+        if v13.Mode == "RPG" then
+            v33.FireMode.Text = "Single-Shot"
+        else
+            v33.FireMode.Text = v13.Mode
+        end
+
+        v33.GunName.Text = v8.Name
+
+        local v1 = v7:GetAttribute("Ammo") or v13.Ammo
+
+        if not v7:GetAttribute("Cooldown") then
+            v33.AmmoText.Text = math.clamp(t2[v7], 0, v1 + 1) .. " "
+            v33.AmmoTextSecondary.Text = "/ " .. v1
+        end
+
+        local v3 = UDim2.new
+
+        v33.BarBackground.Bar.Size = v3(1, 0, math.clamp(t2[v7] / v1, 0, 1), 0)
+
+        if v28.Value == true and t2[v7] > 0 then
+            v33.BarBackground.Bar.BackgroundColor3 = Color3.fromRGB(238, 254, 255)
+            v33.BarBackground.BackgroundColor3 = Color3.fromRGB(93, 93, 93)
+            v33.InfoText.Visible = false
+
+            return
+        end
+
+        if v28.Value == false and t2[v7] > 0 then
+            v33.BarBackground.Bar.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+            v33.BarBackground.BackgroundColor3 = Color3.fromRGB(93, 52, 52)
+
+            if UserInputService.GamepadEnabled then
+                v33.InfoText.Text = "Press " .. UserInputService:GetStringForKeyCode(Enum.KeyCode.ButtonY):gsub("Button", "")
+                v33.InfoText.Visible = true
+
+                return
+            end
+
+            if v68 ~= Enum.UserInputType.Touch then
+                v33.InfoText.Text = "Press F"
+                v33.InfoText.Visible = true
+            end
+        else
+            if v50 then
+                return
+            end
+
+            if v13.Cooldown then
+                v33.AmmoText.Text = "Cooldown"
+            elseif UserInputService.GamepadEnabled then
+                v33.InfoText.Text = "Press " .. UserInputService:GetStringForKeyCode(Enum.KeyCode.ButtonX):gsub("Button", "")
+                v33.InfoText.Visible = true
+            elseif v68 ~= Enum.UserInputType.Touch then
+                v33.InfoText.Text = "Press R"
+                v33.InfoText.Visible = true
+            end
+
+            if not (t2[v7] <= 0) or p1 then
+                return
+            end
+
+            reloadGun()
+        end
+    end
+
+    local Welds = require(ReplicatedStorage:WaitForChild("Attachments System"):WaitForChild("Welds"))
+
+    local function Setup(p1) --[[ Setup | Line: 581 | Upvalues: t4 (copy), v41 (ref), Character (copy), v7 (ref), v8 (ref), GunModels (copy), v12 (ref), ACS_Guns (copy), v13 (ref), v14 (ref), v30 (ref), v26 (ref), v27 (ref), v19 (ref), v20 (ref), v21 (ref), v22 (ref), v23 (ref), v24 (ref), v25 (ref), t2 (copy), HUD (copy), t (copy), v28 (ref), v71 (ref), Update_Gui (copy), v29 (ref), Events (copy), v58 (ref), CurrentCamera (copy), v56 (ref), v57 (ref), v5 (copy), v59 (ref), Welds (copy), LocalPlayer (copy), Utilities (copy), v54 (ref), v55 (ref), v53 (ref), v52 (ref), SetupModule (copy), v16 (ref), v60 (ref), v68 (ref), v46 (ref) ]]
+        for k, v in pairs(t4) do
+            coroutine.close(v)
+        end
+
+        table.clear(t4)
+        v41 = false
+        Character:FindFirstChild("Torso")
+        Character:FindFirstChild("Head")
+        Character:FindFirstChild("HumanoidRootPart")
+        v7 = p1
+        v8 = GunModels:WaitForChild(p1.Name):Clone()
+        v12 = ACS_Guns[p1.Name]
+        v13 = require(v12:WaitForChild("Settings"))
+        v14 = require(v12:WaitForChild("Animations"))
+        v30 = v13.AimSpeedMultiplier or 1
+        v26 = if p1:GetAttribute("FireRate") then 1 / (p1:GetAttribute("FireRate") / 60) else 1 / (v13.FireRate / 60)
+        v27 = 1 / (v13.BurstFireRate / 60)
+        v19 = if p1:GetAttribute("VRecoil") then math.random(p1:GetAttribute("VRecoil").X, p1:GetAttribute("VRecoil").Y) / 1000 else math.random(v13.VRecoil[1], v13.VRecoil[2]) / 1000
+        v20 = if p1:GetAttribute("HRecoil") then math.random(p1:GetAttribute("HRecoil").X, p1:GetAttribute("HRecoil").Y) / 1000 else math.random(v13.HRecoil[1], v13.HRecoil[2]) / 1000
+        v21 = v13.VPunchBase
+        v22 = v13.HPunchBase
+        v23 = v13.DPunchBase
+        v24 = v13.MinRecoilPower
+        v25 = p1:GetAttribute("MinSpread") or v13.MinSpread
+
+        if not t2[p1] then
+            t2[p1] = v12.Ammo.Value
+        end
+
+        HUD.Left:TweenPosition(UDim2.fromScale(-1.2, t.Left.Y.Scale), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.25, true)
+        HUD.Right:TweenPosition(UDim2.fromScale(1.2, t.Right.Y.Scale), Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.25, true)
+        v28 = v12.Chambered
+        v71 = v28.Changed:Connect(Update_Gui)
+        v29 = v12.Sens
+        Events.Equip:FireServer(p1, v13)
+        v58 = Instance.new("Model")
+        v58.Name = p1.Name
+        v58.Parent = CurrentCamera
+        v56 = Instance.new("Part")
+        v56.CastShadow = false
+        v56.FormFactor = "Custom"
+        v56.CanCollide = false
+        v56.Transparency = 1
+        v56.Anchored = true
+        v56.Name = "AnimBase"
+        v56.Massless = true
+        v56.Size = Vector3.new(0.1, 0.1, 0.1)
+        v56.Parent = v58
+        v57 = Instance.new("Motor6D")
+        v57.Part0 = v56
+        v57.Part1 = v5
+        v57.Name = "AnimBaseW"
+        v56.Anchored = false
+        v57.Parent = v56
+        v59 = Instance.new("Motor6D")
+        v59.Name = "Clone"
+        v59.Part0 = v56
+        v59.Part1 = v5
+        v59.Parent = v56
+        v8.Parent = v58
+        Welds.AddAttachments(LocalPlayer, v8)
+
+        for v2, v3 in v8:GetDescendants() do
+            if v3.Name ~= "ZoomScope" and (v3.Name ~= "PivotHolder" and (v3:IsA("BasePart") and v3.Name ~= "Handle")) then
+                if v3.Name ~= "Bolt" and (v3.Name ~= "Lid" and (v3.Name ~= "Bolt2" and v3.Name ~= "Barrell Move")) then
+                    Utilities.Weld(v3, v8:WaitForChild("Handle"))
+                end
+
+                if v3.Name == "Bolt" or (v3.Name == "Slide" or v3.Name == "Barrell Move") then
+                    Utilities.WeldComplex(v8:WaitForChild("Handle"), v3, v3.Name)
+                end
+
+                if v3.Name == "Lid" then
+                    if v8:FindFirstChild("LidHinge") then
+                        Utilities.Weld(v3, v8:WaitForChild("LidHinge"))
+                    else
+                        Utilities.Weld(v3, v8:WaitForChild("Handle"))
+                    end
+                end
+
+                if v3.Name == "Bolt2" then
+                    if v8:FindFirstChild("Bolt") then
+                        Utilities.Weld(v3, v8:WaitForChild("Bolt"))
+
+                        continue
+                    end
+
+                    Utilities.Weld(v3, v8:WaitForChild("Handle"))
+                end
+            end
+        end
+
+        for v4, v510 in v8:GetDescendants() do
+            if v510:IsA("BasePart") and v510.Name ~= "Grip" then
+                v510.Anchored = false
+                v510.CanCollide = false
+            end
+        end
+
+        Welds.MoveAim(LocalPlayer, v8)
+        Welds.MoveSmokePart(LocalPlayer, v8)
+
+        local v6, v72, v82, v9, v10, v11 = SetupModule(v58, Utilities, Character, v54, v55, v53, v52, v56, v57, v13, v8)
+
+        v54 = v6
+        v55 = v72
+        v53 = v82
+        v52 = v9
+        v56 = v10
+        v57 = v11
+        v16 = true
+        _G.GunEquipped = true
+        v60 = tick()
+
+        if v68 ~= Enum.UserInputType.Touch then
+            return
+        end
+
+        v46()
+    end
+
+    Unset = function(p1) --[[ Unset | Line: 748 | Upvalues: SniperFocus (copy), v7 (ref), Character (copy), Events (copy), v13 (ref), t4 (copy), v71 (ref), v58 (ref), HUD (copy), t (copy), v16 (ref), v49 (ref), v41 (ref), v42 (ref), v50 (ref), v39 (ref), ChangeSensitivity (copy), Humanoid2 (copy), Workspace (copy), LocalPlayer (copy), UserInputService (copy), v61 (ref), v68 (ref), CurrentCamera (copy), v36 (ref), v51 (ref), t8 (copy), Crosshair (copy), v33 (ref), v35 (ref), v34 (copy), t3 (ref), v47 (ref), RiotShield (copy) ]]
+        SniperFocus:Stop()
+
+        if v7 then
+            pcall(function() --[[ Line: 752 | Upvalues: v7 (ref), Character (ref) ]]
+                v7:SetAttribute("Aiming", nil)
+
+                if Character:FindFirstChild("S" .. v7.Name) then
+                    Character["S" .. v7.Name]:Destroy()
+
+                    if Character:FindFirstChild("AnimBase") then
+                        Character.AnimBase:Destroy()
+                    end
+                end
+
+                local Torso = Character:FindFirstChild("Torso")
+
+                if Torso == nil then
+                    return
+                end
+
+                local v1 = Torso:FindFirstChild("Right Shoulder")
+                local v2 = Torso:FindFirstChild("Left Shoulder")
+                local Neck = Torso:FindFirstChild("Neck")
+
+                if v1 ~= nil then
+                    v1.Part1 = Character["Right Arm"]
+                end
+
+                if v2 ~= nil then
+                    v2.Part1 = Character["Left Arm"]
+                end
+
+                if Neck == nil then
+                    return
+                end
+
+                Neck.C0 = CFrame.new(0, 1, 0, -1, -0, -0, 0, 0, 1, 0, 1, 0)
+                Neck.C1 = CFrame.new(0, -0.5, 0, -1, -0, -0, 0, 0, 1, 0, 1, 0)
+            end)
+            Events.Unequip:FireServer(v7, v13)
+        end
+
+        for k, v in pairs(t4) do
+            coroutine.close(v)
+        end
+
+        table.clear(t4)
+
+        if v71 then
+            v71:Disconnect()
+        end
+
+        if v58 then
+            v58:Destroy()
+        end
+
+        HUD.Left:TweenPosition(t.Left, Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.25, true)
+        HUD.Right:TweenPosition(t.Right, Enum.EasingDirection.Out, Enum.EasingStyle.Sine, 0.25, true)
+        v16 = false
+        _G.GunEquipped = false
+        v49 = false
+        v41 = false
+        v42 = false
+        v50 = false
+        v39 = false
+        ChangeSensitivity(1)
+        task.spawn(function() --[[ Line: 817 | Upvalues: Humanoid2 (ref), Workspace (ref), LocalPlayer (ref), UserInputService (ref), v61 (ref), v68 (ref), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+            if Humanoid2.Health <= 0 then
+                for v1, v2 in Humanoid2:GetChildren() do
+                    if v2:IsA("ObjectValue") and (v2.Value and v2.Value:IsA("Player")) then
+                        return
+                    end
+                end
+
+                local v3, v4
+
+                if not Humanoid2.SeatPart or Humanoid2.SeatPart.Parent.Parent and (Humanoid2.SeatPart.Parent.Parent.Name ~= "Turrets" and (Humanoid2.SeatPart.Parent.Name ~= "Boxer CRV" and not Workspace:FindFirstChild("CrosshairPart"))) or not LocalPlayer.PlayerGui:FindFirstChild("TurretGui") then
+                    LocalPlayer.CameraMode = Enum.CameraMode.Classic
+                    UserInputService.MouseIconEnabled = true
+                end
+
+                v3 = 15
+                v4 = 70
+                task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), v3 (copy), v68 (ref), v4 (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+                    v61 = if v61 then v61 + 1 or 0 else 0
+
+                    local v22 = v61
+                    local v32 = tick()
+                    local v42 = v3 / 90
+                    local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+                    ChangeSensitivity((math.clamp((math.tan(math.rad(v4) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+                    repeat
+                        if v61 ~= v22 then
+                            break
+                        end
+
+                        local v92 = tick() - v32
+
+                        CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (v4 - CurrentCamera.FieldOfView) * (v92 / v42)
+                        task.wait()
+                    until v42 < v92
+                end)
+            else
+                local v5, v6
+
+                if not Humanoid2.SeatPart or Humanoid2.SeatPart.Parent.Parent and (Humanoid2.SeatPart.Parent.Parent.Name ~= "Turrets" and (Humanoid2.SeatPart.Parent.Name ~= "Boxer CRV" and not Workspace:FindFirstChild("CrosshairPart"))) or not LocalPlayer.PlayerGui:FindFirstChild("TurretGui") then
+                    LocalPlayer.CameraMode = Enum.CameraMode.Classic
+                    UserInputService.MouseIconEnabled = true
+                end
+
+                v5 = 15
+                v6 = 70
+                task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), v5 (copy), v68 (ref), v6 (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+                    v61 = if v61 then v61 + 1 or 0 else 0
+
+                    local v22 = v61
+                    local v32 = tick()
+                    local v42 = v5 / 90
+                    local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+                    ChangeSensitivity((math.clamp((math.tan(math.rad(v6) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+                    repeat
+                        if v61 ~= v22 then
+                            break
+                        end
+
+                        local v92 = tick() - v32
+
+                        CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (v6 - CurrentCamera.FieldOfView) * (v92 / v42)
+                        task.wait()
+                    until v42 < v92
+                end)
+            end
+        end)
+        v36 = 1
+        v51 = 0
+        t8.AimHide:Play()
+
+        if Crosshair and Crosshair:FindFirstChild("Up") then
+            for k, v in pairs(t8.CrosshairHide) do
+                v:Play()
+            end
+        end
+
+        if v33 then
+            v33.Visible = false
+            Crosshair.Visible = false
+            v35.Visible = false
+
+            for v1, v2 in v34.CustomCrosshairs:GetChildren() do
+                v2.Visible = false
+            end
+        end
+
+        for k, v in pairs(t3) do
+            v:disconnect()
+        end
+
+        t3 = {}
+        a = false
+        d = false
+        v47()
+        RiotShield.Disconnect()
+    end
+
+    local function Sprint() --[[ Sprint | Line: 881 | Upvalues: v16 (ref), v6 (ref), v37 (ref), v44 (ref), v45 (ref), v49 (ref), v41 (ref), v51 (ref) ]]
+        if not v16 then
+            return
+        end
+
+        if v6 and v37 > 0 then
+            v44 = false
+            v45 = false
+
+            if v49 then
+                aimGun()
+            end
+
+            if not v41 then
+                v51 = 3
+                SprintAnim()
+            end
+        else
+            if v6 and v37 ~= 0 or v41 then
+                return
+            end
+
+            v51 = if v49 then 2 else 0
+            IdleAnim()
+        end
+    end
+
+    Correndo.Changed:connect(function(p1) --[[ Line: 913 | Upvalues: v6 (ref), Sprint (copy) ]]
+        v6 = p1
+        Sprint()
+    end)
+
+    local function RAND(p1, p2, p3) --[[ RAND | Line: 922 ]]
+        local v1 = 1 / (p3 or 1)
+
+        return math.random(p1 * v1, p2 * v1) / v1
+    end
+
+    local function Lerp(p1, p2, p3) --[[ Lerp | Line: 931 ]]
+        return p1 + (p2 - p1) * p3
+    end
+
+    local function tweenJoint(p1, p2, p3, p4, p5) --[[ tweenJoint | Line: 935 | Upvalues: RunService (copy), v16 (ref) ]]
+        task.spawn(function() --[[ Line: 936 | Upvalues: p1 (copy), p5 (copy), p2 (copy), p3 (copy), RunService (ref), v16 (ref), p4 (copy) ]]
+            local v122 = math.random(-1000000000, 1000000000)
+            local tweenCode
+
+            if p1:findFirstChild("tweenCode") then
+                tweenCode = p1.tweenCode
+                tweenCode.Value = v122
+            else
+                tweenCode = Instance.new("IntValue")
+                tweenCode.Name = "tweenCode"
+                tweenCode.Value = v122
+                tweenCode.Parent = p1
+            end
+
+            if p5 <= 0 then
+                if p2 then
+                    p1.C0 = p2
+                end
+
+                if p3 then
+                    p1.C1 = p3
+                end
+            else
+                local v22 = 1.5 / p5
+                local C0 = p1.C0
+                local C1 = p1.C1
+                local v32 = 0
+                local v42 = nil
+                local v522 = true
+
+                v42 = RunService.Heartbeat:Connect(function(p1) --[[ Line: 964 | Upvalues: v32 (ref), v22 (copy), tweenCode (ref), v122 (copy), v522 (ref), v42 (ref), v16 (ref), p2 (ref), p1 (ref), C0 (copy), p4 (ref), p3 (ref), C1 (copy) ]]
+                    local v1222 = v32 + v22
+
+                    v32 = if v1222 > 90 then 90 else v1222
+
+                    if tweenCode.Value ~= v122 then
+                        v522 = false
+                        v42:Disconnect()
+                    end
+
+                    if not v16 then
+                        v522 = false
+                        v42:Disconnect()
+                    end
+
+                    if p2 then
+                        p1.C0 = C0:Lerp(p2, p4(v32))
+                    end
+
+                    if p3 then
+                        p1.C1 = C1:Lerp(p3, p4(v32))
+                    end
+
+                    if v32 ~= 90 then
+                        return
+                    end
+
+                    v522 = false
+                    v42:Disconnect()
+                end)
+
+                repeat
+                    task.wait()
+                until v522 == false
+            end
+
+            if tweenCode.Value == v122 then
+                tweenCode:Destroy()
+            end
+        end)
+    end
+
+    local function CreateShell() --[[ CreateShell | Line: 997 | Upvalues: Main (copy), LocalPlayer (copy), DebrisGobbler (copy) ]]
+        task.delay(math.random(4, 8) / 10, function() --[[ Line: 998 | Upvalues: Main (ref), LocalPlayer (ref), DebrisGobbler (ref) ]]
+            local Sound = Instance.new("Sound")
+
+            Sound.SoundId = "rbxassetid://325025387"
+            Sound.Volume = 0.5
+            Sound.PlaybackSpeed = math.random(30, 50) / 40
+            Sound.SoundGroup = Main
+            Sound.Parent = LocalPlayer.PlayerGui
+            Sound:Play()
+            DebrisGobbler:AddItem(Sound, Sound.TimeLength + 0.5)
+        end)
+    end
+
+    local BulletFireSystem = ReplicatedStorage:WaitForChild("BulletFireSystem")
+    local BulletHit = BulletFireSystem:WaitForChild("BulletHit")
+    local FireModuleClient = require(script:WaitForChild("FireModuleClient"))
+    local BulletFired = BulletFireSystem:WaitForChild("BulletFired")
+    local FireGun = BulletFireSystem:WaitForChild("FireGun")
+
+    local function GetDir(p1) --[[ GetDir | Line: 1018 | Upvalues: v8 (ref), Character (copy), CurrentCamera (copy), Workspace (copy), FireModuleClient (copy), v37 (ref), Stances (copy), v13 (ref) ]]
+        local lookVector = v8.SmokePart.CFrame.lookVector
+        local v1 = v8.SmokePart.CFrame
+        local t = { Character, v8, CurrentCamera }
+        local count = 0
+        local v2
+
+        repeat
+            local v3 = RaycastParams.new()
+
+            v3.FilterType = Enum.RaycastFilterType.Exclude
+            v3.FilterDescendantsInstances = t
+
+            local v4 = Workspace:Raycast(CurrentCamera.CFrame.Position, CurrentCamera.CFrame.LookVector * 500000, v3)
+
+            if v4 and FireModuleClient.CanRayPierce(nil, v4) then
+                table.insert(t, v4.Instance)
+            end
+
+            v2 = v4
+            count = count + 1
+        until count > 10 or not (v4 and FireModuleClient.CanRayPierce(nil, v4))
+
+        if v2 then
+            lookVector = if (v2.Position - v1.Position).Magnitude > 10 then (CFrame.lookAt(v2.Position, v2.Position + CurrentCamera.CFrame.LookVector).Position - v1.Position).Unit else ((CFrame.lookAt(v2.Position, v2.Position + CurrentCamera.CFrame.LookVector) * CFrame.new(0, 0, -5)).Position - v1.Position).Unit
+        end
+
+        return CFrame.Angles(math.rad(math.random((-p1 - v37 / Stances.Mobility.Value * v13.WalkMultiplier) * 1, (p1 + v37 / Stances.Mobility.Value * v13.WalkMultiplier) * 1) / 1 / 20), math.rad(math.random((-p1 - v37 / Stances.Mobility.Value * v13.WalkMultiplier) * 1, (p1 + v37 / Stances.Mobility.Value * v13.WalkMultiplier) * 1) / 1 / 20), (math.rad(math.random((-p1 - v37 / Stances.Mobility.Value * v13.WalkMultiplier) * 1, (p1 + v37 / Stances.Mobility.Value * v13.WalkMultiplier) * 1) / 1 / 20))) * lookVector
+    end
+
+    function CastRay(p1) --[[ CastRay | Line: 1121 | Upvalues: Character (copy), CurrentCamera (copy), HumanoidRootPart (copy), FireModuleClient (copy), LocalPlayer (copy), v8 (ref), FireGun (copy), v48 (ref), Main (copy), DebrisGobbler (copy) ]]
+        if p1 then
+            local Tool = Character:FindFirstChildOfClass("Tool")
+            local v1 = CurrentCamera[Tool.Name][Tool.Name]
+            local Z = v1.SmokePart.CFrame:ToObjectSpace(HumanoidRootPart.CFrame).Z
+            local v2 = v1.SmokePart.CFrame * CFrame.new(0, 0, Z + 0.5)
+
+            FireModuleClient.FireGun(LocalPlayer, p1, Tool, v8, v2.Position)
+            FireGun:FireServer(p1, Tool, Character:FindFirstChild("S" .. Tool.Name), v2.Position, v48)
+            task.delay(math.random(4, 8) / 10, function() --[[ Line: 998 | Upvalues: Main (ref), LocalPlayer (ref), DebrisGobbler (ref) ]]
+                local Sound = Instance.new("Sound")
+
+                Sound.SoundId = "rbxassetid://325025387"
+                Sound.Volume = 0.5
+                Sound.PlaybackSpeed = math.random(30, 50) / 40
+                Sound.SoundGroup = Main
+                Sound.Parent = LocalPlayer.PlayerGui
+                Sound:Play()
+                DebrisGobbler:AddItem(Sound, Sound.TimeLength + 0.5)
+            end)
+        end
+    end
+    BulletFired.OnClientEvent:Connect(function(p1, p2, p3, p4, p5) --[[ Line: 1146 | Upvalues: LocalPlayer (copy), FireModuleClient (copy) ]]
+        if p1 == LocalPlayer then
+            return
+        end
+
+        FireModuleClient.FireGun(p1, p2, p3, p4, p5)
+    end)
+    BulletHit.OnClientEvent:Connect(function(p1, p2, p3) --[[ Line: 1152 | Upvalues: v16 (ref), Crosshair (copy), LocalPlayer (copy), TweenService (copy), objectHitmarker (copy) ]]
+        if v16 == false or (Crosshair.Parent.Enabled == false or Crosshair.Visible == false) then
+            return
+        end
+
+        if p1 then
+            local Sound = Instance.new("Sound")
+
+            if math.random(1, 2) == 1 then
+                Sound.SoundId = "rbxassetid://8397760862"
+            else
+                Sound.SoundId = "rbxassetid://8397760683"
+            end
+
+            Sound.Parent = LocalPlayer.PlayerGui
+            Sound.Volume = 2
+            Sound.PlayOnRemove = true
+            Sound:Destroy()
+            task.spawn(function() --[[ Line: 1171 | Upvalues: Crosshair (ref), TweenService (ref) ]]
+                for v1, v2 in Crosshair.HitMarker:GetChildren() do
+                    TweenService:Create(v2, TweenInfo.new(0.3), {
+                        BackgroundTransparency = 0
+                    }):Play()
+                end
+
+                task.wait(0.3)
+
+                for v3, v4 in Crosshair.HitMarker:GetChildren() do
+                    TweenService:Create(v4, TweenInfo.new(0.3), {
+                        BackgroundTransparency = 1
+                    }):Play()
+                end
+            end)
+        else
+            if objectHitmarker.Value == false then
+                return
+            end
+
+            local Sound = Instance.new("Sound")
+
+            if math.random(1, 2) == 1 then
+                Sound.SoundId = "rbxassetid://11387332687"
+            else
+                Sound.SoundId = "rbxassetid://11387332597"
+            end
+
+            Sound.Parent = LocalPlayer.PlayerGui
+            Sound.Volume = 0.2
+            Sound.PlaybackSpeed = 2
+            Sound.PlayOnRemove = true
+            Sound:Destroy()
+            task.spawn(function() --[[ Line: 1201 | Upvalues: Crosshair (ref), TweenService (ref) ]]
+                for v1, v2 in Crosshair.ObjectHitMarker:GetChildren() do
+                    TweenService:Create(v2, TweenInfo.new(0.2), {
+                        BackgroundTransparency = 0
+                    }):Play()
+                end
+
+                task.wait(0.3)
+
+                for v3, v4 in Crosshair.ObjectHitMarker:GetChildren() do
+                    TweenService:Create(v4, TweenInfo.new(0.2), {
+                        BackgroundTransparency = 1
+                    }):Play()
+                end
+            end)
+        end
+    end)
+    Humanoid.Running:Connect(function(p1) --[[ Line: 1216 | Upvalues: Humanoid2 (copy), v37 (ref), v16 (ref), Sprint (copy) ]]
+        local v1 = Humanoid2:GetState()
+
+        v37 = if v1 == Enum.HumanoidStateType.FallingDown or (v1 == Enum.HumanoidStateType.Flying or (v1 == Enum.HumanoidStateType.Freefall or v1 == Enum.HumanoidStateType.PlatformStanding)) then 0 else p1
+
+        if not v16 then
+            return
+        end
+
+        Sprint()
+    end)
+
+    local function SlideEx() --[[ SlideEx | Line: 1235 | Upvalues: v16 (ref), v8 (ref), v13 (ref), v26 (ref), RunService (copy), t2 (copy), v7 (ref), t6 (copy), v28 (ref), v5 (copy), v39 (ref) ]]
+        if v16 == false then
+            return
+        end
+
+        if not v8:FindFirstChild("Slide") then
+            return
+        end
+
+        local Slide = v8.Handle:WaitForChild("Slide")
+        local v1 = CFrame.new(v13.SlideExtend) * CFrame.Angles(0, 0, 0)
+
+        local function f2(p1) --[[ Line: 1248 ]]
+            return math.sin((math.rad(p1)))
+        end
+
+        local v3 = 1 * (v26 / 2)
+        local v4 = nil
+
+        task.spawn(function() --[[ Line: 936 | Upvalues: Slide (copy), v3 (copy), v1 (copy), v4 (copy), RunService (ref), v16 (ref), f2 (copy) ]]
+            local v122 = math.random(-1000000000, 1000000000)
+            local tweenCode
+
+            if Slide:findFirstChild("tweenCode") then
+                tweenCode = Slide.tweenCode
+                tweenCode.Value = v122
+            else
+                tweenCode = Instance.new("IntValue")
+                tweenCode.Name = "tweenCode"
+                tweenCode.Value = v122
+                tweenCode.Parent = Slide
+            end
+
+            if v3 <= 0 then
+                if v1 then
+                    Slide.C0 = v1
+                end
+
+                if v4 then
+                    Slide.C1 = v4
+                end
+            else
+                local v22 = 1.5 / v3
+                local C0 = Slide.C0
+                local C1 = Slide.C1
+                local v32 = 0
+                local v42 = nil
+                local v522 = true
+
+                v42 = RunService.Heartbeat:Connect(function(p1) --[[ Line: 964 | Upvalues: v32 (ref), v22 (copy), tweenCode (ref), v122 (copy), v522 (ref), v42 (ref), v16 (ref), v1 (ref), Slide (ref), C0 (copy), f2 (ref), v4 (ref), C1 (copy) ]]
+                    local v1222 = v32 + v22
+
+                    v32 = if v1222 > 90 then 90 else v1222
+
+                    if tweenCode.Value ~= v122 then
+                        v522 = false
+                        v42:Disconnect()
+                    end
+
+                    if not v16 then
+                        v522 = false
+                        v42:Disconnect()
+                    end
+
+                    if p2 then
+                        p1.C0 = C0:Lerp(p2, p4(v32))
+                    end
+
+                    if p3 then
+                        p1.C1 = C1:Lerp(p3, p4(v32))
+                    end
+
+                    if v32 ~= 90 then
+                        return
+                    end
+
+                    v522 = false
+                    v42:Disconnect()
+                end)
+
+                repeat
+                    task.wait()
+                until v522 == false
+            end
+
+            if tweenCode.Value == v122 then
+                tweenCode:Destroy()
+            end
+        end)
+
+        if v13.MoveBolt == true then
+            local Bolt = v8.Handle:WaitForChild("Bolt")
+            local v52 = CFrame.new(v13.BoltExtend) * CFrame.Angles(0, 0, 0)
+
+            local function f6(p1) --[[ Line: 1258 ]]
+                return math.sin((math.rad(p1)))
+            end
+
+            local v72 = 1 * (v26 / 2)
+            local v82 = nil
+
+            task.spawn(function() --[[ Line: 936 | Upvalues: Bolt (copy), v72 (copy), v52 (copy), v82 (copy), RunService (ref), v16 (ref), f6 (copy) ]]
+                local v122 = math.random(-1000000000, 1000000000)
+                local tweenCode
+
+                if Bolt:findFirstChild("tweenCode") then
+                    tweenCode = Bolt.tweenCode
+                    tweenCode.Value = v122
+                else
+                    tweenCode = Instance.new("IntValue")
+                    tweenCode.Name = "tweenCode"
+                    tweenCode.Value = v122
+                    tweenCode.Parent = Bolt
+                end
+
+                if v72 <= 0 then
+                    if v52 then
+                        Bolt.C0 = v52
+                    end
+
+                    if v82 then
+                        Bolt.C1 = v82
+                    end
+                else
+                    local v22 = 1.5 / v72
+                    local C0 = Bolt.C0
+                    local C1 = Bolt.C1
+                    local v32 = 0
+                    local v42 = nil
+                    local v522 = true
+
+                    v42 = RunService.Heartbeat:Connect(function(p1) --[[ Line: 964 | Upvalues: v32 (ref), v22 (copy), tweenCode (ref), v122 (copy), v522 (ref), v42 (ref), v16 (ref), v52 (ref), Bolt (ref), C0 (copy), f6 (ref), v82 (ref), C1 (copy) ]]
+                        local v1222 = v32 + v22
+
+                        v32 = if v1222 > 90 then 90 else v1222
+
+                        if tweenCode.Value ~= v122 then
+                            v522 = false
+                            v42:Disconnect()
+                        end
+
+                        if not v16 then
+                            v522 = false
+                            v42:Disconnect()
+                        end
+
+                        if p2 then
+                            p1.C0 = C0:Lerp(p2, p4(v32))
+                        end
+
+                        if p3 then
+                            p1.C1 = C1:Lerp(p3, p4(v32))
+                        end
+
+                        if v32 ~= 90 then
+                            return
+                        end
+
+                        v522 = false
+                        v42:Disconnect()
+                    end)
+
+                    repeat
+                        task.wait()
+                    until v522 == false
+                end
+
+                if tweenCode.Value == v122 then
+                    tweenCode:Destroy()
+                end
+            end)
+        end
+
+        if v8.Name == "Barrett M82" then
+            local v9 = v8.Handle:WaitForChild("Barrell Move")
+            local v10 = CFrame.new(0, 0, 0.8) * CFrame.Angles(0, 0, 0)
+
+            local function f11(p1) --[[ Line: 1270 ]]
+                return math.sin((math.rad(p1)))
+            end
+
+            local v12 = 250
+            local v132 = nil
+
+            task.spawn(function() --[[ Line: 936 | Upvalues: v9 (copy), v12 (copy), v10 (copy), v132 (copy), RunService (ref), v16 (ref), f11 (copy) ]]
+                local v122 = math.random(-1000000000, 1000000000)
+                local tweenCode
+
+                if v9:findFirstChild("tweenCode") then
+                    tweenCode = v9.tweenCode
+                    tweenCode.Value = v122
+                else
+                    tweenCode = Instance.new("IntValue")
+                    tweenCode.Name = "tweenCode"
+                    tweenCode.Value = v122
+                    tweenCode.Parent = v9
+                end
+
+                if v12 <= 0 then
+                    if v10 then
+                        v9.C0 = v10
+                    end
+
+                    if v132 then
+                        v9.C1 = v132
+                    end
+                else
+                    local v22 = 1.5 / v12
+                    local C0 = v9.C0
+                    local C1 = v9.C1
+                    local v32 = 0
+                    local v42 = nil
+                    local v522 = true
+
+                    v42 = RunService.Heartbeat:Connect(function(p1) --[[ Line: 964 | Upvalues: v32 (ref), v22 (copy), tweenCode (ref), v122 (copy), v522 (ref), v42 (ref), v16 (ref), v10 (ref), v9 (ref), C0 (copy), f11 (ref), v132 (ref), C1 (copy) ]]
+                        local v1222 = v32 + v22
+
+                        v32 = if v1222 > 90 then 90 else v1222
+
+                        if tweenCode.Value ~= v122 then
+                            v522 = false
+                            v42:Disconnect()
+                        end
+
+                        if not v16 then
+                            v522 = false
+                            v42:Disconnect()
+                        end
+
+                        if p2 then
+                            p1.C0 = C0:Lerp(p2, p4(v32))
+                        end
+
+                        if p3 then
+                            p1.C1 = C1:Lerp(p3, p4(v32))
+                        end
+
+                        if v32 ~= 90 then
+                            return
+                        end
+
+                        v522 = false
+                        v42:Disconnect()
+                    end)
+
+                    repeat
+                        task.wait()
+                    until v522 == false
+                end
+
+                if tweenCode.Value == v122 then
+                    tweenCode:Destroy()
+                end
+            end)
+            task.delay(125, function() --[[ Line: 1276 | Upvalues: v8 (ref), RunService (ref), v16 (ref) ]]
+                if v8 and v8:FindFirstChild("Handle") then
+                    local v1 = v8.Handle:WaitForChild("Barrell Move")
+                    local v2 = CFrame.new(0, 0, 0) * CFrame.Angles(0, 0, 0)
+
+                    local function f3(p1) --[[ Line: 1285 ]]
+                        return math.sin((math.rad(p1)))
+                    end
+
+                    local v4 = 250
+                    local v5 = nil
+
+                    task.spawn(function() --[[ Line: 936 | Upvalues: v1 (copy), v4 (copy), v2 (copy), v5 (copy), RunService (ref), v16 (ref), f3 (copy) ]]
+                        local v122 = math.random(-1000000000, 1000000000)
+                        local tweenCode
+
+                        if v1:findFirstChild("tweenCode") then
+                            tweenCode = v1.tweenCode
+                            tweenCode.Value = v122
+                        else
+                            tweenCode = Instance.new("IntValue")
+                            tweenCode.Name = "tweenCode"
+                            tweenCode.Value = v122
+                            tweenCode.Parent = v1
+                        end
+
+                        if v4 <= 0 then
+                            if v2 then
+                                v1.C0 = v2
+                            end
+
+                            if v5 then
+                                v1.C1 = v5
+                            end
+                        else
+                            local v22 = 1.5 / v4
+                            local C0 = v1.C0
+                            local C1 = v1.C1
+                            local v32 = 0
+                            local v42 = nil
+                            local v522 = true
+
+                            v42 = RunService.Heartbeat:Connect(function(p1) --[[ Line: 964 | Upvalues: v32 (ref), v22 (copy), tweenCode (ref), v122 (copy), v522 (ref), v42 (ref), v16 (ref), v2 (ref), v1 (ref), C0 (copy), f3 (ref), v5 (ref), C1 (copy) ]]
+                                local v1222 = v32 + v22
+
+                                v32 = if v1222 > 90 then 90 else v1222
+
+                                if tweenCode.Value ~= v122 then
+                                    v522 = false
+                                    v42:Disconnect()
+                                end
+
+                                if not v16 then
+                                    v522 = false
+                                    v42:Disconnect()
+                                end
+
+                                if p2 then
+                                    p1.C0 = C0:Lerp(p2, p4(v32))
+                                end
+
+                                if p3 then
+                                    p1.C1 = C1:Lerp(p3, p4(v32))
+                                end
+
+                                if v32 ~= 90 then
+                                    return
+                                end
+
+                                v522 = false
+                                v42:Disconnect()
+                            end)
+
+                            repeat
+                                task.wait()
+                            until v522 == false
+                        end
+
+                        if tweenCode.Value == v122 then
+                            tweenCode:Destroy()
+                        end
+                    end)
+                end
+            end)
+        end
+
+        task.delay(v26 / 2, function() --[[ Line: 1293 | Upvalues: v8 (ref), t2 (ref), v7 (ref), v16 (ref), v26 (ref), RunService (ref), v13 (ref), t6 (ref), v28 (ref), v5 (ref), v39 (ref) ]]
+            if not (v8 and v8:FindFirstChild("Handle")) then
+                return
+            end
+
+            if t2[v7] >= 1 then
+                if v16 == false then
+                    return
+                end
+
+                local Slide = v8.Handle:WaitForChild("Slide")
+                local v1 = CFrame.new(0, 0, 0) * CFrame.Angles(0, 0, 0)
+
+                local function f2(p1) --[[ Line: 1309 ]]
+                    return math.sin((math.rad(p1)))
+                end
+
+                local v3 = 1 * (v26 / 2)
+                local v4 = nil
+
+                task.spawn(function() --[[ Line: 936 | Upvalues: Slide (copy), v3 (copy), v1 (copy), v4 (copy), RunService (ref), v16 (ref), f2 (copy) ]]
+                    local v122 = math.random(-1000000000, 1000000000)
+                    local tweenCode
+
+                    if Slide:findFirstChild("tweenCode") then
+                        tweenCode = Slide.tweenCode
+                        tweenCode.Value = v122
+                    else
+                        tweenCode = Instance.new("IntValue")
+                        tweenCode.Name = "tweenCode"
+                        tweenCode.Value = v122
+                        tweenCode.Parent = Slide
+                    end
+
+                    if v3 <= 0 then
+                        if v1 then
+                            Slide.C0 = v1
+                        end
+
+                        if v4 then
+                            Slide.C1 = v4
+                        end
+                    else
+                        local v22 = 1.5 / v3
+                        local C0 = Slide.C0
+                        local C1 = Slide.C1
+                        local v32 = 0
+                        local v42 = nil
+                        local v522 = true
+
+                        v42 = RunService.Heartbeat:Connect(function(p1) --[[ Line: 964 | Upvalues: v32 (ref), v22 (copy), tweenCode (ref), v122 (copy), v522 (ref), v42 (ref), v16 (ref), v1 (ref), Slide (ref), C0 (copy), f2 (ref), v4 (ref), C1 (copy) ]]
+                            local v1222 = v32 + v22
+
+                            v32 = if v1222 > 90 then 90 else v1222
+
+                            if tweenCode.Value ~= v122 then
+                                v522 = false
+                                v42:Disconnect()
+                            end
+
+                            if not v16 then
+                                v522 = false
+                                v42:Disconnect()
+                            end
+
+                            if p2 then
+                                p1.C0 = C0:Lerp(p2, p4(v32))
+                            end
+
+                            if p3 then
+                                p1.C1 = C1:Lerp(p3, p4(v32))
+                            end
+
+                            if v32 ~= 90 then
+                                return
+                            end
+
+                            v522 = false
+                            v42:Disconnect()
+                        end)
+
+                        repeat
+                            task.wait()
+                        until v522 == false
+                    end
+
+                    if tweenCode.Value == v122 then
+                        tweenCode:Destroy()
+                    end
+                end)
+
+                if v13.MoveBolt == true then
+                    local Bolt = v8.Handle:WaitForChild("Bolt")
+                    local v52 = CFrame.new(0, 0, 0) * CFrame.Angles(0, 0, 0)
+
+                    local function f6(p1) --[[ Line: 1319 ]]
+                        return math.sin((math.rad(p1)))
+                    end
+
+                    local v72 = 1 * (v26 / 2)
+                    local v82 = nil
+
+                    task.spawn(function() --[[ Line: 936 | Upvalues: Bolt (copy), v72 (copy), v52 (copy), v82 (copy), RunService (ref), v16 (ref), f6 (copy) ]]
+                        local v122 = math.random(-1000000000, 1000000000)
+                        local tweenCode
+
+                        if Bolt:findFirstChild("tweenCode") then
+                            tweenCode = Bolt.tweenCode
+                            tweenCode.Value = v122
+                        else
+                            tweenCode = Instance.new("IntValue")
+                            tweenCode.Name = "tweenCode"
+                            tweenCode.Value = v122
+                            tweenCode.Parent = Bolt
+                        end
+
+                        if v72 <= 0 then
+                            if v52 then
+                                Bolt.C0 = v52
+                            end
+
+                            if v82 then
+                                Bolt.C1 = v82
+                            end
+                        else
+                            local v22 = 1.5 / v72
+                            local C0 = Bolt.C0
+                            local C1 = Bolt.C1
+                            local v32 = 0
+                            local v42 = nil
+                            local v522 = true
+
+                            v42 = RunService.Heartbeat:Connect(function(p1) --[[ Line: 964 | Upvalues: v32 (ref), v22 (copy), tweenCode (ref), v122 (copy), v522 (ref), v42 (ref), v16 (ref), v52 (ref), Bolt (ref), C0 (copy), f6 (ref), v82 (ref), C1 (copy) ]]
+                                local v1222 = v32 + v22
+
+                                v32 = if v1222 > 90 then 90 else v1222
+
+                                if tweenCode.Value ~= v122 then
+                                    v522 = false
+                                    v42:Disconnect()
+                                end
+
+                                if not v16 then
+                                    v522 = false
+                                    v42:Disconnect()
+                                end
+
+                                if p2 then
+                                    p1.C0 = C0:Lerp(p2, p4(v32))
+                                end
+
+                                if p3 then
+                                    p1.C1 = C1:Lerp(p3, p4(v32))
+                                end
+
+                                if v32 ~= 90 then
+                                    return
+                                end
+
+                                v522 = false
+                                v42:Disconnect()
+                            end)
+
+                            repeat
+                                task.wait()
+                            until v522 == false
+                        end
+
+                        if tweenCode.Value == v122 then
+                            tweenCode:Destroy()
+                        end
+                    end)
+                end
+            else
+                if t2[v7] < 1 and v13.SlideLock == true then
+                    if not table.find(t6, v8.Name) then
+                        v28.Value = false
+                    end
+
+                    if v13.MoveBolt ~= true or v13.BoltLock ~= false then
+                        v5.Click:Play()
+                        v39 = true
+
+                        return
+                    end
+
+                    local Bolt = v8.Handle:WaitForChild("Bolt")
+                    local v9 = CFrame.new(0, 0, 0) * CFrame.Angles(0, 0, 0)
+
+                    local function f10(p1) --[[ Line: 1334 ]]
+                        return math.sin((math.rad(p1)))
+                    end
+
+                    local v11 = 1 * (v26 / 2)
+                    local v12 = nil
+
+                    task.spawn(function() --[[ Line: 936 | Upvalues: Bolt (copy), v11 (copy), v9 (copy), v12 (copy), RunService (ref), v16 (ref), f10 (copy) ]]
+                        local v122 = math.random(-1000000000, 1000000000)
+                        local tweenCode
+
+                        if Bolt:findFirstChild("tweenCode") then
+                            tweenCode = Bolt.tweenCode
+                            tweenCode.Value = v122
+                        else
+                            tweenCode = Instance.new("IntValue")
+                            tweenCode.Name = "tweenCode"
+                            tweenCode.Value = v122
+                            tweenCode.Parent = Bolt
+                        end
+
+                        if v11 <= 0 then
+                            if v9 then
+                                Bolt.C0 = v9
+                            end
+
+                            if v12 then
+                                Bolt.C1 = v12
+                            end
+                        else
+                            local v22 = 1.5 / v11
+                            local C0 = Bolt.C0
+                            local C1 = Bolt.C1
+                            local v32 = 0
+                            local v42 = nil
+                            local v522 = true
+
+                            v42 = RunService.Heartbeat:Connect(function(p1) --[[ Line: 964 | Upvalues: v32 (ref), v22 (copy), tweenCode (ref), v122 (copy), v522 (ref), v42 (ref), v16 (ref), v9 (ref), Bolt (ref), C0 (copy), f10 (ref), v12 (ref), C1 (copy) ]]
+                                local v1222 = v32 + v22
+
+                                v32 = if v1222 > 90 then 90 else v1222
+
+                                if tweenCode.Value ~= v122 then
+                                    v522 = false
+                                    v42:Disconnect()
+                                end
+
+                                if not v16 then
+                                    v522 = false
+                                    v42:Disconnect()
+                                end
+
+                                if p2 then
+                                    p1.C0 = C0:Lerp(p2, p4(v32))
+                                end
+
+                                if p3 then
+                                    p1.C1 = C1:Lerp(p3, p4(v32))
+                                end
+
+                                if v32 ~= 90 then
+                                    return
+                                end
+
+                                v522 = false
+                                v42:Disconnect()
+                            end)
+
+                            repeat
+                                task.wait()
+                            until v522 == false
+                        end
+
+                        if tweenCode.Value == v122 then
+                            tweenCode:Destroy()
+                        end
+                    end)
+                    v5.Click:Play()
+                    v39 = true
+
+                    return
+                end
+
+                if not t2[v7] or v13.SlideLock ~= false then
+                    return
+                end
+
+                local Slide = v8.Handle:WaitForChild("Slide")
+                local v132 = CFrame.new(0, 0, 0) * CFrame.Angles(0, 0, 0)
+
+                local function f14(p1) --[[ Line: 1347 ]]
+                    return math.sin((math.rad(p1)))
+                end
+
+                local v15 = 1 * (v26 / 2)
+                local v162 = nil
+
+                task.spawn(function() --[[ Line: 936 | Upvalues: Slide (copy), v15 (copy), v132 (copy), v162 (copy), RunService (ref), v16 (ref), f14 (copy) ]]
+                    local v122 = math.random(-1000000000, 1000000000)
+                    local tweenCode
+
+                    if Slide:findFirstChild("tweenCode") then
+                        tweenCode = Slide.tweenCode
+                        tweenCode.Value = v122
+                    else
+                        tweenCode = Instance.new("IntValue")
+                        tweenCode.Name = "tweenCode"
+                        tweenCode.Value = v122
+                        tweenCode.Parent = Slide
+                    end
+
+                    if v15 <= 0 then
+                        if v132 then
+                            Slide.C0 = v132
+                        end
+
+                        if v162 then
+                            Slide.C1 = v162
+                        end
+                    else
+                        local v22 = 1.5 / v15
+                        local C0 = Slide.C0
+                        local C1 = Slide.C1
+                        local v32 = 0
+                        local v42 = nil
+                        local v522 = true
+
+                        v42 = RunService.Heartbeat:Connect(function(p1) --[[ Line: 964 | Upvalues: v32 (ref), v22 (copy), tweenCode (ref), v122 (copy), v522 (ref), v42 (ref), v16 (ref), v132 (ref), Slide (ref), C0 (copy), f14 (ref), v162 (ref), C1 (copy) ]]
+                            local v1222 = v32 + v22
+
+                            v32 = if v1222 > 90 then 90 else v1222
+
+                            if tweenCode.Value ~= v122 then
+                                v522 = false
+                                v42:Disconnect()
+                            end
+
+                            if not v16 then
+                                v522 = false
+                                v42:Disconnect()
+                            end
+
+                            if p2 then
+                                p1.C0 = C0:Lerp(p2, p4(v32))
+                            end
+
+                            if p3 then
+                                p1.C1 = C1:Lerp(p3, p4(v32))
+                            end
+
+                            if v32 ~= 90 then
+                                return
+                            end
+
+                            v522 = false
+                            v42:Disconnect()
+                        end)
+
+                        repeat
+                            task.wait()
+                        until v522 == false
+                    end
+
+                    if tweenCode.Value == v122 then
+                        tweenCode:Destroy()
+                    end
+                end)
+
+                if v13.MoveBolt == true then
+                    local Bolt = v8.Handle:WaitForChild("Bolt")
+                    local v17 = CFrame.new(0, 0, 0) * CFrame.Angles(0, 0, 0)
+
+                    local function f18(p1) --[[ Line: 1357 ]]
+                        return math.sin((math.rad(p1)))
+                    end
+
+                    local v19 = 1 * (v26 / 2)
+                    local v20 = nil
+
+                    task.spawn(function() --[[ Line: 936 | Upvalues: Bolt (copy), v19 (copy), v17 (copy), v20 (copy), RunService (ref), v16 (ref), f18 (copy) ]]
+                        local v122 = math.random(-1000000000, 1000000000)
+                        local tweenCode
+
+                        if Bolt:findFirstChild("tweenCode") then
+                            tweenCode = Bolt.tweenCode
+                            tweenCode.Value = v122
+                        else
+                            tweenCode = Instance.new("IntValue")
+                            tweenCode.Name = "tweenCode"
+                            tweenCode.Value = v122
+                            tweenCode.Parent = Bolt
+                        end
+
+                        if v19 <= 0 then
+                            if v17 then
+                                Bolt.C0 = v17
+                            end
+
+                            if v20 then
+                                Bolt.C1 = v20
+                            end
+                        else
+                            local v22 = 1.5 / v19
+                            local C0 = Bolt.C0
+                            local C1 = Bolt.C1
+                            local v32 = 0
+                            local v42 = nil
+                            local v522 = true
+
+                            v42 = RunService.Heartbeat:Connect(function(p1) --[[ Line: 964 | Upvalues: v32 (ref), v22 (copy), tweenCode (ref), v122 (copy), v522 (ref), v42 (ref), v16 (ref), v17 (ref), Bolt (ref), C0 (copy), f18 (ref), v20 (ref), C1 (copy) ]]
+                                local v1222 = v32 + v22
+
+                                v32 = if v1222 > 90 then 90 else v1222
+
+                                if tweenCode.Value ~= v122 then
+                                    v522 = false
+                                    v42:Disconnect()
+                                end
+
+                                if not v16 then
+                                    v522 = false
+                                    v42:Disconnect()
+                                end
+
+                                if p2 then
+                                    p1.C0 = C0:Lerp(p2, p4(v32))
+                                end
+
+                                if p3 then
+                                    p1.C1 = C1:Lerp(p3, p4(v32))
+                                end
+
+                                if v32 ~= 90 then
+                                    return
+                                end
+
+                                v522 = false
+                                v42:Disconnect()
+                            end)
+
+                            repeat
+                                task.wait()
+                            until v522 == false
+                        end
+
+                        if tweenCode.Value == v122 then
+                            tweenCode:Destroy()
+                        end
+                    end)
+                end
+
+                if not table.find(t6, v8.Name) then
+                    v28.Value = false
+                end
+
+                v5.Click:Play()
+            end
+        end)
+    end
+
+    local v87 = 1
+    local v88 = 1
+
+    local function recoil() --[[ recoil | Line: 1374 | Upvalues: v7 (ref), Character (copy), v19 (ref), v20 (ref), CurrentCamera (copy), v13 (ref), v21 (ref), v22 (ref), v23 (ref), v68 (ref), v88 (ref), UserInputService (copy), v49 (ref), v18 (ref), v24 (ref), v8 (ref), LocalPlayer (copy), CamoTextures (copy), v16 (ref), bulletShells (copy), CreateSound (copy), v5 (copy), v87 (ref), SlideEx (copy) ]]
+        if v7.Parent ~= Character then
+            return
+        end
+
+        task.spawn(function() --[[ Line: 1379 | Upvalues: v19 (ref), v20 (ref), CurrentCamera (ref), v13 (ref), v21 (ref), v22 (ref), v23 (ref), v68 (ref), v88 (ref), UserInputService (ref), v49 (ref), v18 (ref), v24 (ref) ]]
+            local v1 = v19
+            local v2 = v20 * math.random(-1, 1)
+
+            CurrentCamera.CFrame = CurrentCamera.CFrame * CFrame.Angles(v1, v2, 0)
+
+            local v3 = -v1 / 30
+            local v4 = -v2 / 30
+            local v5 = if v13.GunType == 0 then v21 else math.random(-v21 * 50, v21 * 100) / 100
+            local v6 = math.random(-v22 * 100, v22 * 100) / 100
+            local v7 = v23 * math.random(-1, 1)
+            local AimRecoilReduction = v13.AimRecoilReduction
+
+            v88 = if v68 == Enum.UserInputType.Touch then 0.6 elseif UserInputService.GamepadEnabled then 0.8 else 1
+            v18 = if v49 then v18:Lerp(v18 * CFrame.new(0, 0, v13.RecoilPunch / 2) * CFrame.Angles(math.rad(v5 * v24 / AimRecoilReduction * v88), math.rad(v6 * v24 / AimRecoilReduction * v88), (math.rad(v7 * v24 / AimRecoilReduction * v88))), 1) else v18:Lerp(v18 * CFrame.new(0, 0, v13.RecoilPunch) * CFrame.Angles(math.rad(v5 * v24 * v88), math.rad(v6 * v24 * v88), (math.rad(v7 * v24 * v88))), 1)
+
+            for i = 1, 30 * v13.AimRecover do
+                CurrentCamera.CoordinateFrame = CFrame.new(CurrentCamera.Focus.p) * (CurrentCamera.CoordinateFrame - CurrentCamera.CoordinateFrame.p) * CFrame.Angles(v3, v4, 0) * CFrame.new(0, 0, (CurrentCamera.Focus.p - CurrentCamera.CoordinateFrame.p).magnitude)
+                task.wait()
+            end
+        end)
+
+        local SmokePart = v8:FindFirstChild("SmokePart")
+        local v1 = SmokePart and SmokePart:FindFirstChild("FlashFX[Flash]")
+        local v2 = SmokePart and SmokePart:FindFirstChild("Smoke")
+        local v3 = SmokePart and SmokePart:FindFirstChild("FlashFX")
+        local v4 = LocalPlayer:FindFirstChild("Attachments"):FindFirstChild(v8.Name)
+        local t = {}
+        local v52 = if v4 then v4:GetAttribute("VFXUsing") else v4
+
+        if v52 then
+            local v6 = v4:GetAttribute("Camo" .. v52)
+
+            if v6 then
+                t = CamoTextures[v6].CustomVFX or {}
+            end
+        end
+
+        if v1 and t.FlashColor then
+            v1.Color = t.FlashColor
+        elseif v1 then
+            v1.Color = ColorSequence.new(Color3.new(1, 1, 0.498039), Color3.new(1, 0.333333, 0))
+        end
+
+        if v2 and t.SmokeColor then
+            v2.Color = t.SmokeColor
+        elseif v2 then
+            v2.Color = ColorSequence.new(Color3.new(255/255, 255/255, 255/255))
+        end
+
+        if v3 and t.LightFlashColor then
+            v3.Color = t.LightFlashColor
+        elseif v3 then
+            v3.Color = Color3.new(1, 0.843137, 0.145098)
+        end
+
+        if v1 then
+            if v8:FindFirstChild("Flash Hider") then
+                v1.Rate = 150
+            else
+                v1.Rate = 1000
+
+                if v3 then
+                    v3.Enabled = true
+                end
+            end
+
+            v1.Enabled = true
+        end
+
+        if v2 then
+            v2.Enabled = true
+        end
+
+        if v8:FindFirstChild("Chamber") then
+            for v82, v9 in v8.Chamber:GetChildren() do
+                if v16 == false then
+                    break
+                end
+
+                if v9.Name == "Shell" and bulletShells.Value == true then
+                    v9:Emit(1)
+
+                    continue
+                end
+
+                if v9:IsA("ParticleEmitter") then
+                    v9.Enabled = true
+                end
+            end
+        end
+
+        task.delay(0.03333333333333333, function() --[[ Line: 1512 | Upvalues: SmokePart (copy), v8 (ref), v1 (copy), v2 (copy), v3 (copy) ]]
+            if not (SmokePart and v8) then
+                return
+            end
+
+            if SmokePart:FindFirstChild("FlashFX[Flash]") then
+                v1.Enabled = false
+            end
+
+            if SmokePart:FindFirstChild("Smoke") then
+                v2.Enabled = false
+            end
+
+            if SmokePart:FindFirstChild("FlashFX") then
+                v3.Enabled = false
+            end
+
+            local Chamber = v8:FindFirstChild("Chamber")
+
+            if not Chamber then
+                return
+            end
+
+            for v12, v22 in Chamber:GetChildren() do
+                if v22:IsA("ParticleEmitter") then
+                    v22.Enabled = false
+                end
+            end
+        end)
+
+        local v10 = Character:WaitForChild("S" .. v8.Name, 5)
+
+        if not v10 then
+            return
+        end
+
+        if v10:FindFirstChild("Suppressor") then
+            CreateSound(v8, v5["Sound" .. v87], "Suppressed")
+        else
+            CreateSound(v8, v5["Sound" .. v87], "Normal")
+        end
+
+        v87 = v87 + 1
+
+        if v87 == 5 then
+            v87 = 1
+        end
+
+        SlideEx()
+    end
+
+    local v89 = 0
+    local v90 = nil
+
+    local function HeadMovement() --[[ HeadMovement | Line: 1564 | Upvalues: v89 (ref), Character (copy), v43 (ref), v90 (ref), Events (copy), CurrentCamera (copy), Neck (copy), v16 (ref) ]]
+        local v1 = os.clock()
+
+        if v1 - v89 < 0.06666666666666667 then
+            return
+        end
+
+        v89 = v1
+
+        if Character.Humanoid.Health <= 0 then
+            return
+        end
+
+        if v43 then
+            v90 = CFrame.new(0, -0.5, 0) * CFrame.Angles(1.5707963267948966, math.pi, 0)
+        else
+            local lookVector = Character.HumanoidRootPart.CFrame:toObjectSpace(CurrentCamera.CFrame).lookVector
+
+            if not Neck then
+                return
+            end
+
+            if Character.Humanoid.Sit == true or (Character.HumanoidRootPart.Anchored == true or Character:GetAttribute("NoMovement") == true) then
+                v90 = CFrame.new(0, -0.5, 0) * CFrame.Angles(1.5707963267948966, math.pi, 0)
+            else
+                local v2 = CFrame.new(0, -0.5, 0)
+                local v3 = v2 * CFrame.Angles(0, math.asin(lookVector.X) / 1.15, 0)
+                local Angles2 = CFrame.Angles
+                local v4 = -math.asin(CurrentCamera.CFrame.LookVector.Y)
+
+                v90 = v3 * Angles2(v4 + math.asin(Character.Torso.CFrame.lookVector.Y), 0, 0) * CFrame.Angles(-1.5707963267948966, 0, math.pi)
+            end
+
+            if not v16 then
+                local C1 = Neck.C1
+
+                for i = 0, 1, 0.07 do
+                    Neck.C1 = C1:Lerp(v90, i)
+                    task.wait()
+                end
+            end
+        end
+
+        Events.HeadRot:FireServer(v90)
+    end
+
+    local v91 = 0
+    local v92 = 0
+    local v93 = 0
+    local v94 = 0
+    local v95 = 0
+    local v96 = nil
+
+    Character.ChildAdded:connect(function(p1) --[[ Line: 1619 | Upvalues: LocalPlayer (copy), Humanoid2 (copy), Character (copy), ACS_Guns (copy), v17 (ref), v96 (ref), v16 (ref), UserInputService (copy), GamepadService (copy), Setup (copy), t7 (ref), Server (copy), CurrentCamera (copy), Client (copy), v33 (ref), v34 (copy), v35 (ref), v68 (ref), Crosshair (copy), v13 (ref), v8 (ref), RiotShield (copy), v7 (ref), Update_Gui (copy), t2 (copy), v28 (ref), v5 (copy), Sprint (copy), Unset (copy) ]]
+        if LocalPlayer.Team.Name == "Loading" then
+            task.wait()
+            Humanoid2:UnequipTools()
+
+            return
+        end
+
+        if Character:GetAttribute("Downed") == true then
+            task.wait()
+            Humanoid2:UnequipTools()
+
+            return
+        end
+
+        if Character:GetAttribute((("S%*_Health"):format((string.gsub(p1.Name, " ", "_"))))) == 0 then
+            local v1 = nil
+
+            for v2, v3 in LocalPlayer.Backpack:GetChildren() do
+                if v1 ~= p1 then
+                    v1 = v3
+                end
+            end
+
+            task.wait()
+
+            if v1 then
+                Humanoid2:EquipTool(v1)
+                task.wait()
+            end
+
+            Humanoid2:UnequipTools()
+        else
+            if not Character:FindFirstChild("HumanoidRootPart") or Character.HumanoidRootPart.Anchored == true and Character:GetAttribute("InDrone") ~= true then
+                task.wait()
+                Humanoid2:UnequipTools()
+
+                return
+            end
+
+            if not (p1:IsA("Tool") and (ACS_Guns:FindFirstChild(p1.Name) and Humanoid2.Health > 0)) then
+                return
+            end
+
+            local v4 = true
+            local v52 = ACS_Guns:FindFirstChild(p1.Name)
+            local v6 = if v52 then v52:FindFirstChild("Settings") else v52
+            local v72 = if v6 then require(v6) else v6
+
+            if Character:WaitForChild("Humanoid").Sit and Character.Humanoid.SeatPart:IsA("VehicleSeat") or (Character:WaitForChild("Humanoid").Sit and Character.Humanoid.SeatPart:IsA("Seat") or (v17 and not v72.AllowedInWater or (LocalPlayer:GetAttribute("ControllingLargeDrone") or Character:GetAttribute("InDrone")))) then
+                task.wait()
+                Humanoid2:UnequipTools()
+                v4 = false
+            end
+
+            if not v4 then
+                return
+            end
+
+            v96 = p1
+
+            if v16 then
+                if not v16 then
+                    return
+                end
+
+                Unset()
+                Setup(p1)
+            else
+                UserInputService.MouseIconEnabled = false
+                GamepadService:DisableGamepadCursor()
+                LocalPlayer.CameraMode = Enum.CameraMode.LockFirstPerson
+                Setup(p1)
+                t7 = { Character, Server, CurrentCamera, Client }
+                v33 = v34:WaitForChild("GunHUD")
+                v35 = v34:WaitForChild("Mobile")
+                v68 = UserInputService:GetLastInputType()
+                Crosshair.CurrentGun.Value = p1.Name
+
+                if v68 == Enum.UserInputType.Touch then
+                    v33.Position = UDim2.new(0.82, 0, 0.96, 0)
+                    v35.Visible = true
+
+                    if v13.FireModes.ChangeFiremode then
+                        v35.FireMode.Visible = true
+                    else
+                        v35.FireMode.Visible = false
+                    end
+
+                    if v8:FindFirstChild("Aim2", true) or v8:FindFirstChild("Hybrid") then
+                        v35.ScopeSwap.Visible = true
+                    else
+                        v35.ScopeSwap.Visible = false
+                    end
+                else
+                    v33.Position = UDim2.new(0.97, 0, 0.96, 0)
+                    v35.Visible = false
+                end
+
+                if LocalPlayer.SettingsFolder.crosshair.Value == true and p1.Name ~= "Riot Shield" then
+                    if p1.Name == "Binoculars" then
+                        Crosshair.Visible = false
+                        v33.Visible = false
+                    else
+                        Crosshair.Visible = true
+                        v33.Visible = true
+                    end
+                else
+                    Crosshair.Visible = true
+
+                    if p1.Name == "Riot Shield" then
+                        task.spawn(function() --[[ Line: 1724 | Upvalues: RiotShield (ref), v34 (ref), Character (ref), v7 (ref), v13 (ref) ]]
+                            RiotShield.TrackHealth(v34, Character:WaitForChild("S" .. v7.Name), v13)
+                        end)
+                        v33.Visible = false
+                    elseif p1.Name == "Binoculars" then
+                        v33.Visible = false
+                    else
+                        v33.Visible = true
+                    end
+                end
+
+                Update_Gui(true)
+
+                if t2[v7] <= 0 then
+                    if v8.Name == "RPG" then
+                        v8.Rocket.Transparency = 1
+                    end
+
+                    reloadGun()
+                elseif v28.Value == false and t2[v7] > 0 then
+                    chamberGun()
+                else
+                    task.delay(0.1, function() --[[ Line: 1752 | Upvalues: v16 (ref), v5 (ref) ]]
+                        if v16 then
+                            v5.AimUp:Play()
+                        end
+                    end)
+                    EquipAnim()
+                    Sprint()
+                end
+            end
+        end
+    end)
+    Humanoid.Seated:Connect(function(p1, p2) --[[ Line: 1770 | Upvalues: Humanoid2 (copy), LocalPlayer (copy), CameraMaxZoomDistance (copy) ]]
+        if p1 and (p2 and p2:IsA("VehicleSeat")) then
+            Humanoid2:UnequipTools()
+
+            return
+        end
+
+        if not p2 or (not p2.Parent.Parent or p2.Parent.Parent.Name ~= "Turrets") then
+            LocalPlayer.CameraMaxZoomDistance = CameraMaxZoomDistance
+        end
+    end)
+    Character.ChildRemoved:Connect(function(p1) --[[ Line: 1781 | Upvalues: v7 (ref), v16 (ref), Unset (copy) ]]
+        if p1 ~= v7 or not v16 then
+            return
+        end
+
+        Unset()
+    end)
+    v97 = RunService.RenderStepped:Connect(function(p1) --[[ Line: 1791 | Upvalues: HeadMovement (copy), v16 (ref), v18 (ref), v13 (ref), v8 (ref), CurrentCamera (copy), Workspace (copy), t7 (ref), t5 (copy), v93 (ref), v94 (ref), v92 (ref), v91 (ref), v65 (copy), v95 (ref), v63 (ref), v37 (ref), Config (copy), v69 (ref), v66 (copy), v59 (ref), v49 (ref), v1 (ref), v2 (ref), v3 (ref), v4 (ref), t8 (copy), v34 (copy), v7 (ref), LocalPlayer (copy), Crosshair (copy), v25 (ref), v67 (ref), Humanoid (copy), v62 (ref), v70 (ref), v32 (ref), v26 (ref), v24 (ref), v36 (ref), v5 (copy), v30 (ref), v51 (ref) ]]
+        HeadMovement()
+
+        if v16 == false then
+            return
+        end
+
+        v18 = v18:Lerp(CFrame.new(), 1 - math.exp(-v13.PunchRecover * 60 * p1))
+
+        local v42, v52 = Workspace:FindPartOnRayWithIgnoreList(Ray.new(v8.Handle.Position, CurrentCamera.CFrame.LookVector * v13.GunSize), t7, false, true)
+
+        if v42 and t5[v42.Name] then
+            v42 = nil
+            v52 = nil
+        end
+
+        local lookVector = CurrentCamera.CoordinateFrame.lookVector
+        local v6 = math.asin(lookVector.Y)
+        local v72 = -math.atan(lookVector.X / lookVector.Z)
+        local v82 = v93 - v6
+        local v9 = v94 - v72
+        local v11 = v82 * (if math.abs(v82) < 1 then 1 else 0)
+        local v122, v132
+
+        if math.abs(v9) < 1 then
+            v122 = v6
+            v132 = 1
+        else
+            v122 = v6
+            v132 = 0
+        end
+
+        v92 = v92 * 0.5 + v11
+        v91 = v91 * 0.5 + v9 * v132
+        v93 = v122
+        v94 = v72
+        v65.t = Vector3.new(v91, v92, v95)
+
+        local p = v65.p
+        local z = p.z
+        local v17 = p.X * 5
+        local v182 = p.Y * 5
+        local v20 = math.sin(v63 * 3) * (v37 / Config.RunWalkSpeed * (v69 + 1))
+        local v222 = math.cos(v63 * 3) * (v37 / Config.RunWalkSpeed * (v69 + 1))
+        local v242 = math.sin(v63 * 1.75) * (v37 / Config.RunWalkSpeed * (v69 + 1))
+        local v262 = math.cos(v63 * 3.5) * (v37 / Config.RunWalkSpeed * (v69 + 1))
+
+        v66.t = Vector3.new(v20, v222, v69)
+
+        local p2 = v66.p
+        local v28 = p2.Z / 10
+        local v29 = p2.X / 1
+        local v302 = p2.Y / 1
+
+        if v59 then
+            if v49 then
+                v1 = v1:Lerp(UDim2.new(0.5, 0, 0.5, 0), 1 - math.exp(-10 * p1))
+                v2 = v2:Lerp(UDim2.new(0.5, 0, 0.5, 0), 1 - math.exp(-10 * p1))
+                v3 = v3:Lerp(UDim2.new(0.5, 0, 0.5, 0), 1 - math.exp(-10 * p1))
+                v4 = v4:Lerp(UDim2.new(0.5, 0, 0.5, 0), 1 - math.exp(-10 * p1))
+
+                for k, v in pairs(t8.CrosshairHide) do
+                    v:Play()
+                end
+            else
+                local v31 = v34.CustomCrosshairs:FindFirstChild(v7.Name)
+
+                if LocalPlayer.SettingsFolder.crosshair.Value == true and (Crosshair.CurrentGun.Value ~= "Riot Shield" and not v31) then
+                    if Crosshair.CurrentGun.Value ~= "Binoculars" then
+                        Crosshair.Visible = true
+
+                        local v342 = (math.clamp(v25 * 1.2 + 1, 5, 50) + math.clamp(v37, 1, 25) * 1) / 50 / 10
+
+                        v1 = v1:Lerp(UDim2.new(0.5, 0, 0.5 - v342, 0), 1 - math.exp(-30 * p1))
+                        v2 = v2:Lerp(UDim2.new(0.5, 0, v342 + 0.5, 0), 1 - math.exp(-30 * p1))
+                        v3 = v3:Lerp(UDim2.new(0.5 - v342, 0, 0.5, 0), 1 - math.exp(-30 * p1))
+                        v4 = v4:Lerp(UDim2.new(v342 + 0.5, 0, 0.5, 0), 1 - math.exp(-30 * p1))
+
+                        for k, v in pairs(t8.CrosshairShow) do
+                            v:Play()
+                        end
+                    end
+                elseif v31 then
+                    v31.Visible = true
+                end
+            end
+
+            if v37 > 1 then
+                v67 = Humanoid.WalkSpeed / 3
+                v95 = if a then 0 + (v37 * -0.2 / Config.RunWalkSpeed - 0) * 10 elseif d then 0 + (v37 * 0.2 / Config.RunWalkSpeed - 0) * 10 else 0
+            else
+                v67 = v37 / Config.RunWalkSpeed + 0.5
+                v69 = 0
+            end
+
+            local v35 = tick()
+
+            v63 = v63 + (v35 - v62) * v67
+            v62 = v35
+
+            local v362 = CFrame.Angles(v182 * 0.08726646259971647, -v17 * 0.08726646259971647, -v17 * 0)
+
+            v70 = v70:Lerp(CFrame.new(v29 / 220, -v302 / 180, 0) * CFrame.new(v242 / 220, -v262 / 180, 0) * CFrame.Angles(0, 0, v28 / 5) * CFrame.Angles(0, 0, z / 2 / 10), 1 - math.exp(-80 * p1))
+            v59.C0 = v59.C0:Lerp(v70 * v362, 1 - math.exp(-75 * p1))
+        end
+
+        Crosshair.Position = UDim2.new(0.5, 0, 0.5, 0)
+        Crosshair.Up.Position = v1
+        Crosshair.Down.Position = v2
+        Crosshair.Left.Position = v3
+        Crosshair.Right.Position = v4
+
+        if v25 then
+            local v372 = time()
+
+            if v26 * 2 < v372 - v32 then
+                v32 = v372
+                v25 = math.max(v7:GetAttribute("MinSpread") or v13.MinSpread, v25 - v13.AimInaccuracyStepAmount / 5)
+                v24 = math.max(v13.MinRecoilPower, v24 - v13.RecoilPowerStepAmount / 4)
+            end
+        end
+
+        if v49 then
+            local Aim2 = v8:FindFirstChild("Aim2", true)
+
+            if v36 == 1 and Aim2 then
+                v59.C1 = v59.C1:Lerp(v59.C1 * v59.C0:inverse() * v18 * CFrame.new() * v8.Aim.CFrame:toObjectSpace(v5.CFrame), (1 - math.exp(-10 * p1)) * v30)
+            elseif v36 == 2 and Aim2 then
+                v59.C1 = v59.C1:Lerp(v59.C1 * v59.C0:inverse() * v18 * Aim2.CFrame:toObjectSpace(v5.CFrame), (1 - math.exp(-10 * p1)) * v30)
+            else
+                v59.C1 = v59.C1:Lerp(v59.C1 * v59.C0:inverse() * v18 * v8.Aim.CFrame:toObjectSpace(v5.CFrame), (1 - math.exp(-10 * p1)) * v30)
+            end
+        elseif v42 and v51 == 0 then
+            v59.C1 = v59.C1:Lerp(v59.C0:inverse() * v18 * CFrame.new(0, 0, ((v8.Handle.Position - v52).magnitude / v13.GunSize - 1) * -v13.GunFOVReduction), (1 - math.exp(-10 * p1)) * v30)
+        else
+            v59.C1 = v59.C1:Lerp(v59.C0:inverse() * v18 * CFrame.new(), (1 - math.exp(-10 * p1)) * v30)
+        end
+
+        local v41 = v7:GetAttribute("SwayBase") or v13.SwayBase
+        local v43 = CurrentCamera.CFrame * CFrame.new(0, 0, -0.5)
+
+        v5.CFrame = v43 * CFrame.Angles(math.rad(v41 * math.sin(tick() * 2.5)), math.rad(v41 * math.sin(tick() * 1.25)), 0)
+    end)
+    v15.Button1Up:Connect(function() --[[ Line: 1974 | Upvalues: v16 (ref), v44 (ref), v45 (ref) ]]
+        if not v16 then
+            return
+        end
+
+        v44 = false
+        v45 = false
+    end)
+
+    local RocketSystem = ReplicatedStorage:WaitForChild("RocketSystem")
+    local FireRocketBindable = RocketSystem.Events:WaitForChild("FireRocketBindable")
+    local FireRocket = RocketSystem.Events:WaitForChild("FireRocket")
+
+    fireGun = function(p1) --[[ fireGun | Line: 1985 | Upvalues: v13 (ref), v7 (ref), v60 (ref), v16 (ref), v72 (ref), v44 (ref), v96 (ref), t2 (copy), t6 (copy), v8 (ref), v28 (ref), v5 (copy), v39 (ref), v40 (ref), v50 (ref), v6 (ref), v73 (ref), vibrateController (copy), v26 (ref), v49 (ref), v68 (ref), GetDir (copy), v25 (ref), recoil (copy), Update_Gui (copy), Events (copy), v14 (ref), v31 (ref), v24 (ref), v27 (ref), v74 (ref), v45 (ref), Sprint (copy), RocketSystem (copy), LocalPlayer (copy), FireRocket (copy), FireRocketBindable (copy) ]]
+        if v13 and (v13.Cooldown and v7:GetAttribute("Cooldown")) then
+            return
+        end
+
+        if v13 and (v13.EquipDelay and tick() - v60 < v13.EquipDelay) then
+            return
+        end
+
+        if not v16 then
+            return
+        end
+
+        v72 = p1
+        v44 = true
+
+        local v1 = v96
+
+        if t2[v7] <= 0 then
+            if not table.find(t6, v8.Name) then
+                v28.Value = false
+            end
+
+            v5.Click:Play()
+        else
+            if v39 or v28.Value ~= true then
+                v5.Click:Play()
+
+                return
+            end
+
+            if not v40 or (v50 or v6) then
+                return
+            end
+
+            v40 = false
+
+            local Mode = v13.Mode
+
+            if Mode == "Semi" and t2[v7] > 0 then
+                if v1 ~= v96 then
+                    return
+                end
+
+                if v73 then
+                    coroutine.wrap(vibrateController)(p1, Enum.VibrationMotor.Small, math.random(300, 450) / 1000, v26)
+                end
+
+                local v2 = if v49 or not v13.HipfireSpreadMuitpler then 1 else v13.HipfireSpreadMuitpler
+
+                if v68 == Enum.UserInputType.Touch then
+                    v2 = v2 * 0.25
+                end
+
+                local t = {}
+
+                for i = 1, v13.Bullets do
+                    coroutine.resume(coroutine.create(function() --[[ Line: 2048 | Upvalues: GetDir (ref), v2 (ref), v25 (ref), t (copy) ]]
+                        table.insert(t, (GetDir(v2 * v25)))
+                    end))
+                end
+
+                CastRay(t)
+                recoil()
+                t2[v7] = t2[v7] - 1
+                Update_Gui(true)
+                Events.ServerGunAnim:FireServer(v26, v14, v7)
+
+                if v25 and not v31 then
+                    v25 = math.min(v7:GetAttribute("MaxSpread") or v13.MaxSpread, v25 + v13.AimInaccuracyStepAmount)
+                    v24 = math.min(v13.MaxRecoilPower, v24 + v13.RecoilPowerStepAmount)
+                end
+
+                v31 = not v31
+                task.wait(v26)
+            elseif Mode == "Auto" then
+                while v44 and (v16 and (not v40 and (t2[v7] > 0 and (v1 == v96 and v13.Mode == Mode)))) do
+                    if v73 then
+                        coroutine.wrap(vibrateController)(p1, Enum.VibrationMotor.Small, math.random(300, 450) / 1000, v26)
+                    end
+
+                    local t = {}
+
+                    for j = 1, v13.Bullets do
+                        coroutine.resume(coroutine.create(function() --[[ Line: 2094 | Upvalues: GetDir (ref), v25 (ref), t (copy) ]]
+                            table.insert(t, (GetDir(v25)))
+                        end))
+                    end
+
+                    CastRay(t)
+                    recoil()
+                    t2[v7] = t2[v7] - 1
+                    Update_Gui(true)
+                    Events.ServerGunAnim:FireServer(v26, v14, v7)
+
+                    if v25 and not v31 then
+                        v25 = math.min(v7:GetAttribute("MaxSpread") or v13.MaxSpread, v25 + v13.AimInaccuracyStepAmount)
+                        v24 = math.min(v13.MaxRecoilPower, v24 + v13.RecoilPowerStepAmount)
+                    end
+
+                    v31 = not v31
+                    task.wait(v26)
+                end
+            elseif Mode == "Burst" and t2[v7] > 0 then
+                for k = 1, v13.BurstShot do
+                    if v1 ~= v96 then
+                        return
+                    end
+
+                    if v13.Mode ~= Mode then
+                        break
+                    end
+
+                    local t = {}
+
+                    for n = 1, v13.Bullets do
+                        if v44 and t2[v7] > 0 then
+                            if v73 then
+                                coroutine.wrap(vibrateController)(p1, Enum.VibrationMotor.Small, math.random(400, 600) / 1000, v27)
+                            end
+
+                            coroutine.resume(coroutine.create(function() --[[ Line: 2140 | Upvalues: GetDir (ref), v25 (ref), t (copy) ]]
+                                table.insert(t, (GetDir(v25)))
+                            end))
+                            CastRay(t)
+                            recoil()
+                            t2[v7] = t2[v7] - 1
+                            Update_Gui(true)
+                        end
+                    end
+
+                    if v25 and not v31 then
+                        v25 = math.min(v7:GetAttribute("MaxSpread") or v13.MaxSpread, v25 + v13.AimInaccuracyStepAmount)
+                        v24 = math.min(v13.MaxRecoilPower, v24 + v13.RecoilPowerStepAmount)
+                    end
+
+                    v31 = not v31
+                    task.wait(v27)
+                end
+            else
+                if (Mode == "Bolt-Action" or Mode == "Pump-Action") and t2[v7] > 0 then
+                    if v1 ~= v96 then
+                        return
+                    end
+
+                    Events.ServerGunAnim:FireServer(v26, v14, v7)
+
+                    if v73 and v74 then
+                        coroutine.wrap(vibrateController)(p1, Enum.VibrationMotor.Large, math.random(350, 600) / 1000, v26)
+                    elseif v73 then
+                        coroutine.wrap(vibrateController)(p1, Enum.VibrationMotor.Small, math.random(350, 600) / 1000, v26)
+                    end
+
+                    local t = {}
+                    local v12 = if v49 or not v13.HipfireSpreadMuitpler then 1 else v13.HipfireSpreadMuitpler
+
+                    if v68 == Enum.UserInputType.Touch then
+                        v12 = v12 * 0.25
+                    end
+
+                    for m = 1, v13.Bullets do
+                        coroutine.resume(coroutine.create(function() --[[ Line: 2202 | Upvalues: GetDir (ref), v12 (ref), v25 (ref), t (copy) ]]
+                            table.insert(t, (GetDir(v12 * v25)))
+                        end))
+                    end
+
+                    CastRay(t)
+                    recoil()
+                    t2[v7] = t2[v7] - 1
+                    Update_Gui(true)
+
+                    if v25 and not v31 then
+                        v25 = math.min(v7:GetAttribute("MaxSpread") or v13.MaxSpread, v25 + v13.AimInaccuracyStepAmount)
+                        v24 = math.min(v13.MaxRecoilPower, v24 + v13.RecoilPowerStepAmount)
+                    end
+
+                    v31 = not v31
+
+                    if v49 or not v49 then
+                        v44 = false
+                        v45 = false
+                        v40 = false
+                        v50 = true
+                        ChamberAnim(true)
+
+                        if v1 ~= v96 then
+                            return
+                        end
+
+                        Sprint()
+                        v40 = true
+                        v50 = false
+                    end
+
+                    task.wait(v26)
+                end
+
+                if Mode == "RPG" and t2[v7] > 0 then
+                    local v162 = GetDir(v25)
+                    local v17 = RocketSystem.Rockets:WaitForChild("RPG Rocket")
+                    local RocketSettings = require(v7:WaitForChild("RocketSettings"))
+
+                    recoil()
+                    t2[v7] = t2[v7] - 1
+                    Update_Gui(true)
+
+                    local t = {
+                        Origin = v8.Rocket.Position,
+                        Direction = v162,
+                        Settings = RocketSettings,
+                        RocketModel = v17,
+                        Vehicle = v7,
+                        Weapon = v7,
+                        PlrFired = LocalPlayer
+                    }
+
+                    FireRocket:InvokeServer(t)
+                    FireRocketBindable:Fire(LocalPlayer, t)
+
+                    if v8:FindFirstChild("Rocket") then
+                        v8.Rocket.Transparency = 1
+                    end
+
+                    task.wait(0.2)
+                elseif Mode == "Lock-On" and t2[v7] > 0 then
+                    local Target = v7:FindFirstChild("Target")
+
+                    if Target and Target.Value then
+                        local v19 = RocketSystem.Rockets:WaitForChild(v7.Name .. " G-Rocket")
+
+                        if v19:IsA("ObjectValue") then
+                            v19 = v19.Value
+                        end
+
+                        local RocketSettings = require(v7:WaitForChild("RocketSettings"))
+                        local t = {
+                            Origin = v8.Rocket.Position,
+                            Direction = GetDir(v25),
+                            Settings = RocketSettings,
+                            RocketModel = v19,
+                            Vehicle = v7,
+                            Weapon = v7,
+                            PlrFired = LocalPlayer,
+                            Target = Target.Value
+                        }
+
+                        FireRocket:InvokeServer(t)
+                        FireRocketBindable:Fire(LocalPlayer, t)
+                        recoil()
+                        t2[v7] = t2[v7] - 1
+                        Update_Gui(true)
+                    end
+                end
+            end
+
+            v40 = true
+
+            if not (t2[v7] <= 0) then
+                return
+            end
+
+            if not table.find(t6, v8.Name) then
+                v28.Value = false
+            end
+        end
+
+        reloadGun(true)
+    end
+    function aimGun(p1) --[[ aimGun | Line: 2325 | Upvalues: v8 (ref), v16 (ref), v51 (ref), v49 (ref), CurrentCamera (copy), v6 (ref), v50 (ref), v73 (ref), vibrateController (copy), v7 (ref), v5 (copy), SniperFocus (copy), v10 (ref), TweenService (copy), v11 (copy), v36 (ref), v61 (ref), v68 (ref), ChangeSensitivity (copy), v13 (ref), t8 (copy) ]]
+        local v1 = if v8 then v8:FindFirstChild("GlassLense", true) else nil
+
+        if v16 and (v51 > -2 and (not v49 and ((CurrentCamera.Focus.p - CurrentCamera.CFrame.p).magnitude < 1 and not v6))) then
+            if (v8.Name == "RPG" or (v8.Name == "Javelin" or v8.Name ~= "Stinger")) and v50 == true then
+                return
+            end
+
+            if v73 then
+                coroutine.wrap(vibrateController)(p1, Enum.VibrationMotor.Small, math.random(100, 200) / 1000, 0.1)
+            end
+
+            v51 = 2
+            v49 = true
+            v7:SetAttribute("Aiming", true)
+            v5.AimDown:Play()
+
+            if v1 then
+                if v1.Parent:GetAttribute("Glare") == true then
+                    SniperFocus:Start(v8)
+                end
+
+                if v10 then
+                    v10:Cancel()
+                end
+
+                v10 = TweenService:Create(v1, v11, {
+                    Transparency = 1
+                })
+
+                for v2, v3 in v1.Parent:GetDescendants() do
+                    if v3:IsA("Decal") and (v3.Name ~= "SecondaryCamo" and v3.Name ~= "PrimaryCamo") then
+                        TweenService:Create(v3, v11, {
+                            Transparency = 0
+                        }):Play()
+
+                        continue
+                    end
+
+                    if v3:IsA("ImageLabel") then
+                        TweenService:Create(v3, v11, {
+                            ImageTransparency = 0
+                        }):Play()
+                    end
+                end
+
+                v10:Play()
+            end
+
+            if v8:FindFirstChild("Aim2", true) == nil then
+                if v36 == 1 then
+                    if v7:GetAttribute("ChangeFOV") then
+                        local X = v7:GetAttribute("ChangeFOV").X
+                        local v4 = 120
+
+                        task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), v4 (copy), v68 (ref), X (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+                            v61 = if v61 then v61 + 1 or 0 else 0
+
+                            local v22 = v61
+                            local v32 = tick()
+                            local v42 = v4 / 90
+                            local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+                            ChangeSensitivity((math.clamp((math.tan(math.rad(X) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+                            repeat
+                                if v61 ~= v22 then
+                                    break
+                                end
+
+                                local v92 = tick() - v32
+
+                                CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (X - CurrentCamera.FieldOfView) * (v92 / v42)
+                                task.wait()
+                            until v42 < v92
+                        end)
+                    else
+                        local v52 = v13.ChangeFOV[1]
+                        local v62 = 120
+
+                        task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), v62 (copy), v68 (ref), v52 (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+                            v61 = if v61 then v61 + 1 or 0 else 0
+
+                            local v22 = v61
+                            local v32 = tick()
+                            local v42 = v62 / 90
+                            local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+                            ChangeSensitivity((math.clamp((math.tan(math.rad(v52) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+                            repeat
+                                if v61 ~= v22 then
+                                    break
+                                end
+
+                                local v92 = tick() - v32
+
+                                CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (v52 - CurrentCamera.FieldOfView) * (v92 / v42)
+                                task.wait()
+                            until v42 < v92
+                        end)
+                    end
+
+                    if v13.FocusOnSight or v7:GetAttribute("FocusOnSight") then
+                        t8.AimShow:Play()
+                    else
+                        t8.AimHide:Play()
+                    end
+                else
+                    if v36 ~= 2 then
+                        return
+                    end
+
+                    if v7:GetAttribute("ChangeFOV") then
+                        local Y = v7:GetAttribute("ChangeFOV").Y
+                        local v72 = 120
+
+                        task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), v72 (copy), v68 (ref), Y (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+                            v61 = if v61 then v61 + 1 or 0 else 0
+
+                            local v22 = v61
+                            local v32 = tick()
+                            local v42 = v72 / 90
+                            local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+                            ChangeSensitivity((math.clamp((math.tan(math.rad(Y) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+                            repeat
+                                if v61 ~= v22 then
+                                    break
+                                end
+
+                                local v92 = tick() - v32
+
+                                CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (Y - CurrentCamera.FieldOfView) * (v92 / v42)
+                                task.wait()
+                            until v42 < v92
+                        end)
+                    else
+                        local v82 = v13.ChangeFOV[2]
+                        local v9 = 120
+
+                        task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), v9 (copy), v68 (ref), v82 (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+                            v61 = if v61 then v61 + 1 or 0 else 0
+
+                            local v22 = v61
+                            local v32 = tick()
+                            local v42 = v9 / 90
+                            local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+                            ChangeSensitivity((math.clamp((math.tan(math.rad(v82) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+                            repeat
+                                if v61 ~= v22 then
+                                    break
+                                end
+
+                                local v92 = tick() - v32
+
+                                CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (v82 - CurrentCamera.FieldOfView) * (v92 / v42)
+                                task.wait()
+                            until v42 < v92
+                        end)
+                    end
+
+                    if v13.FocusOnSight2 or v7:GetAttribute("FocusOnSight2") then
+                        t8.AimShow:Play()
+                    else
+                        t8.AimHide:Play()
+                    end
+                end
+            elseif v36 == 1 then
+                if v7:GetAttribute("ChangeFOV") then
+                    local X = v7:GetAttribute("ChangeFOV").X
+                    local v102 = 120
+
+                    task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), v102 (copy), v68 (ref), X (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+                        v61 = if v61 then v61 + 1 or 0 else 0
+
+                        local v22 = v61
+                        local v32 = tick()
+                        local v42 = v102 / 90
+                        local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+                        ChangeSensitivity((math.clamp((math.tan(math.rad(X) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+                        repeat
+                            if v61 ~= v22 then
+                                break
+                            end
+
+                            local v92 = tick() - v32
+
+                            CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (X - CurrentCamera.FieldOfView) * (v92 / v42)
+                            task.wait()
+                        until v42 < v92
+                    end)
+                else
+                    local v112 = v13.ChangeFOV[1]
+                    local v12 = 120
+
+                    task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), v12 (copy), v68 (ref), v112 (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+                        v61 = if v61 then v61 + 1 or 0 else 0
+
+                        local v22 = v61
+                        local v32 = tick()
+                        local v42 = v12 / 90
+                        local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+                        ChangeSensitivity((math.clamp((math.tan(math.rad(v112) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+                        repeat
+                            if v61 ~= v22 then
+                                break
+                            end
+
+                            local v92 = tick() - v32
+
+                            CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (v112 - CurrentCamera.FieldOfView) * (v92 / v42)
+                            task.wait()
+                        until v42 < v92
+                    end)
+                end
+
+                if v13.FocusOnSight or v7:GetAttribute("FocusOnSight") then
+                    t8.AimShow:Play()
+                else
+                    t8.AimHide:Play()
+                end
+            else
+                if v36 ~= 2 then
+                    return
+                end
+
+                if v7:GetAttribute("ChangeFOV") then
+                    local Y = v7:GetAttribute("ChangeFOV").Y
+                    local v132 = 120
+
+                    task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), v132 (copy), v68 (ref), Y (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+                        v61 = if v61 then v61 + 1 or 0 else 0
+
+                        local v22 = v61
+                        local v32 = tick()
+                        local v42 = v132 / 90
+                        local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+                        ChangeSensitivity((math.clamp((math.tan(math.rad(Y) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+                        repeat
+                            if v61 ~= v22 then
+                                break
+                            end
+
+                            local v92 = tick() - v32
+
+                            CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (Y - CurrentCamera.FieldOfView) * (v92 / v42)
+                            task.wait()
+                        until v42 < v92
+                    end)
+                else
+                    local v14 = v13.ChangeFOV[2]
+                    local v15 = 120
+
+                    task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), v15 (copy), v68 (ref), v14 (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+                        v61 = if v61 then v61 + 1 or 0 else 0
+
+                        local v22 = v61
+                        local v32 = tick()
+                        local v42 = v15 / 90
+                        local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+                        ChangeSensitivity((math.clamp((math.tan(math.rad(v14) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+                        repeat
+                            if v61 ~= v22 then
+                                break
+                            end
+
+                            local v92 = tick() - v32
+
+                            CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (v14 - CurrentCamera.FieldOfView) * (v92 / v42)
+                            task.wait()
+                        until v42 < v92
+                    end)
+                end
+
+                if v13.FocusOnSight2 or v7:GetAttribute("FocusOnSight2") then
+                    t8.AimShow:Play()
+                else
+                    t8.AimHide:Play()
+                end
+            end
+
+            return
+        end
+
+        if not (v49 and v16) then
+            return
+        end
+
+        if v73 then
+            coroutine.wrap(vibrateController)(p1, Enum.VibrationMotor.Small, math.random(100, 200) / 1000, 0.1)
+        end
+
+        if v1 then
+            SniperFocus:Stop()
+
+            if v10 then
+                v10:Cancel()
+            end
+
+            v10 = TweenService:Create(v1, v11, {
+                Transparency = v1:GetAttribute("OGTransparency")
+            })
+
+            for v162, v17 in v1.Parent:GetDescendants() do
+                if v17:IsA("Decal") and (v17.Name ~= "SecondaryCamo" and v17.Name ~= "PrimaryCamo") then
+                    TweenService:Create(v17, v11, {
+                        Transparency = 1
+                    }):Play()
+
+                    continue
+                end
+
+                if v17:IsA("ImageLabel") then
+                    TweenService:Create(v17, v11, {
+                        ImageTransparency = 1
+                    }):Play()
+                end
+            end
+
+            v10:Play()
+        end
+
+        v51 = 0
+        ChangeSensitivity(1)
+        v5.AimUp:Play()
+
+        local v18 = 120
+        local v19 = 70
+
+        task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), v18 (copy), v68 (ref), v19 (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+            v61 = if v61 then v61 + 1 or 0 else 0
+
+            local v22 = v61
+            local v32 = tick()
+            local v42 = v18 / 90
+            local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+            ChangeSensitivity((math.clamp((math.tan(math.rad(v19) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+            repeat
+                if v61 ~= v22 then
+                    break
+                end
+
+                local v92 = tick() - v32
+
+                CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (v19 - CurrentCamera.FieldOfView) * (v92 / v42)
+                task.wait()
+            until v42 < v92
+        end)
+        v49 = false
+        v7:SetAttribute("Aiming", nil)
+        t8.AimHide:Play()
+    end
+    function reloadGun(p1) --[[ reloadGun | Line: 2459 | Upvalues: v16 (ref), v51 (ref), v8 (ref), v7 (ref), v13 (ref), v42 (ref), v50 (ref), t2 (copy), v28 (ref), v44 (ref), v45 (ref), v40 (ref), RocketSystem (copy), v49 (ref), v39 (ref), Sprint (copy), v41 (ref), Update_Gui (copy) ]]
+        if not v16 or v51 <= -2 then
+            return
+        end
+
+        local v1 = v8.Name
+        local v2 = v7:GetAttribute("Ammo") or v13.Ammo
+
+        v42 = false
+
+        if v13.Mode == "Explosive" or (v50 or v13.ReloadType ~= 1) then
+            if v13.Mode == "Explosive" or (v50 or v13.ReloadType ~= 2) then
+                if v13.Mode ~= "Explosive" and (v50 and (v13.ReloadType == 2 and (v41 and not (p1 or v42)))) then
+                    v42 = true
+                    Sprint()
+                    task.wait(0.25)
+                end
+            else
+                if v13.IncludeChamberedBullet and t2[v7] == v2 + 1 then
+                    Sprint()
+
+                    return
+                end
+
+                if not v13.IncludeChamberedBullet and (t2[v7] == v2 and v28.Value == true) then
+                    Sprint()
+
+                    return
+                end
+
+                if v42 then
+                    Sprint()
+
+                    return
+                end
+
+                v44 = false
+                v45 = false
+                v40 = false
+                v50 = true
+
+                for i = 1, v2 - t2[v7] do
+                    if not v16 or (not v8 or v8.Name ~= v1) then
+                        v50 = false
+
+                        return
+                    end
+
+                    if not v42 and (t2[v7] < v2 and not v41) then
+                        ShellInsertAnim()
+
+                        if v8.Name ~= v1 then
+                            return
+                        end
+
+                        local v3 = v7:GetAttribute("Ammo") or v13.Ammo
+
+                        if v13.ReloadType == 1 then
+                            if t2[v7] > 0 and v13.IncludeChamberedBullet == true then
+                                t2[v7] = v3 + 1
+                            else
+                                t2[v7] = v3
+                            end
+                        elseif v13.ReloadType == 2 and t2[v7] < v3 then
+                            local v4 = t2
+                            local v5 = v7
+
+                            v4[v5] = v4[v5] + 1
+                        end
+
+                        Update_Gui(true)
+                    end
+                end
+
+                if v28.Value == false and v39 == true then
+                    ChamberBKAnim()
+                elseif v28.Value == false and v39 == false then
+                    ChamberAnim()
+                end
+
+                if v8.Name ~= v1 then
+                    return
+                end
+
+                Sprint()
+                v42 = false
+                v40 = true
+                v50 = false
+            end
+        else
+            if v13.IncludeChamberedBullet and t2[v7] == v2 + 1 then
+                return
+            end
+
+            if not v13.IncludeChamberedBullet and (t2[v7] == v2 and v28.Value == true) then
+                return
+            end
+
+            v44 = false
+            v45 = false
+            v40 = false
+            v50 = true
+
+            if v8.Name == "RPG" or (v8.Name == "Javelin" or v8.Name == "Stinger") then
+                RocketSystem.Events.RocketReloadedFX:FireServer(v7, false)
+
+                if v49 == true then
+                    aimGun()
+                end
+            end
+
+            ReloadAnim()
+
+            if not v16 or (not v8 or v8.Name ~= v1) then
+                v50 = false
+
+                return
+            end
+
+            if v28.Value == false and v39 == true then
+                ChamberBKAnim()
+            elseif v28.Value == false and v39 == false then
+                ChamberAnim()
+            end
+
+            if v8.Name ~= v1 then
+                return
+            end
+
+            Sprint()
+            v40 = true
+            v50 = false
+
+            if v8.Name == "RPG" or (v8.Name == "Javelin" or v8.Name == "Stinger") then
+                RocketSystem.Events.RocketReloadedFX:FireServer(v7, true)
+            end
+        end
+
+        Update_Gui(true)
+    end
+    function chamberGun() --[[ chamberGun | Line: 2589 | Upvalues: v16 (ref), v50 (ref), v51 (ref), t6 (copy), v8 (ref), v44 (ref), v45 (ref), v40 (ref), v96 (ref), v39 (ref), Sprint (copy) ]]
+        if not v16 or (v50 or (not (v51 > -2) or table.find(t6, v8.Name))) then
+            return
+        end
+
+        v44 = false
+        v45 = false
+        v40 = false
+        v50 = true
+
+        if v39 then
+            ChamberBKAnim()
+        else
+            ChamberAnim()
+        end
+
+        if v96 ~= v96 then
+            return
+        end
+
+        Sprint()
+        v40 = true
+        v50 = false
+    end
+    changeFireMode = function() --[[ changeFireMode | Line: 2615 | Upvalues: v16 (ref), v13 (ref), v5 (copy), Update_Gui (copy) ]]
+        if not (v16 and v13.FireModes.ChangeFiremode) then
+            return
+        end
+
+        v5.SafetyClick:Play()
+
+        if v13.Mode == "Semi" and v13.FireModes.Burst == true then
+            v13.Mode = "Burst"
+        elseif v13.Mode == "Semi" and (v13.FireModes.Burst == false and v13.FireModes.Auto == true) then
+            v13.Mode = "Auto"
+        elseif v13.Mode == "Semi" and (v13.FireModes.Burst == false and (v13.FireModes.Auto == false and v13.FireModes.Explosive == true)) then
+            v13.Mode = "Explosive"
+        elseif v13.Mode == "Burst" and v13.FireModes.Auto == true then
+            v13.Mode = "Auto"
+        elseif v13.Mode == "Burst" and (v13.FireModes.Explosive == true and v13.FireModes.Auto == false) then
+            v13.Mode = "Explosive"
+        elseif v13.Mode == "Burst" and (v13.FireModes.Semi == true and (v13.FireModes.Auto == false and v13.FireModes.Explosive == false)) then
+            v13.Mode = "Semi"
+        elseif v13.Mode == "Auto" and v13.FireModes.Explosive == true then
+            v13.Mode = "Explosive"
+        elseif v13.Mode == "Auto" and (v13.FireModes.Semi == true and v13.FireModes.Explosive == false) then
+            v13.Mode = "Semi"
+        elseif v13.Mode == "Auto" and (v13.FireModes.Semi == false and (v13.FireModes.Burst == true and v13.FireModes.Explosive == false)) then
+            v13.Mode = "Burst"
+        elseif v13.Mode == "Explosive" and v13.FireModes.Semi == true then
+            v13.Mode = "Semi"
+        elseif v13.Mode == "Explosive" and (v13.FireModes.Semi == false and v13.FireModes.Burst == true) then
+            v13.Mode = "Burst"
+        elseif v13.Mode == "Explosive" and (v13.FireModes.Semi == false and (v13.FireModes.Burst == false and v13.FireModes.Auto == true)) then
+            v13.Mode = "Auto"
+        end
+
+        Update_Gui()
+    end
+
+    local v98 = nil
+
+    swapGunScope = function() --[[ swapGunScope | Line: 2686 | Upvalues: v16 (ref), v8 (ref), v98 (ref), v36 (ref), TweenService (copy), v49 (ref), v7 (ref), v61 (ref), v68 (ref), ChangeSensitivity (copy), CurrentCamera (copy), v13 (ref), t8 (copy) ]]
+        if v16 then
+            local ScopePivot = v8:FindFirstChild("ScopePivot", true)
+
+            if ScopePivot then
+                if v98 then
+                    v98:Cancel()
+                end
+
+                if v36 == 2 then
+                    v98 = TweenService:Create(ScopePivot.PivotWeld, TweenInfo.new(0.15), {
+                        C1 = CFrame.new()
+                    })
+                    v98:Play()
+                elseif v36 == 1 then
+                    v98 = TweenService:Create(ScopePivot.PivotWeld, TweenInfo.new(0.15), {
+                        C1 = CFrame.new(0, 0, 0) * CFrame.Angles(1.5707963267948966, 0, 0)
+                    })
+                    v98:Play()
+                end
+            end
+        end
+
+        if v49 and v16 then
+            if v8:FindFirstChild("Aim2", true) == nil then
+                if v36 == 1 then
+                    v36 = 2
+
+                    if v7:GetAttribute("ChangeFOV") then
+                        local Y = v7:GetAttribute("ChangeFOV").Y
+                        local v1 = 120
+
+                        task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), v1 (copy), v68 (ref), Y (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+                            v61 = if v61 then v61 + 1 or 0 else 0
+
+                            local v22 = v61
+                            local v32 = tick()
+                            local v42 = v1 / 90
+                            local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+                            ChangeSensitivity((math.clamp((math.tan(math.rad(Y) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+                            repeat
+                                if v61 ~= v22 then
+                                    break
+                                end
+
+                                local v92 = tick() - v32
+
+                                CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (Y - CurrentCamera.FieldOfView) * (v92 / v42)
+                                task.wait()
+                            until v42 < v92
+                        end)
+                    else
+                        local v2 = v13.ChangeFOV[2]
+                        local v3 = 120
+
+                        task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), v3 (copy), v68 (ref), v2 (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+                            v61 = if v61 then v61 + 1 or 0 else 0
+
+                            local v22 = v61
+                            local v32 = tick()
+                            local v42 = v3 / 90
+                            local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+                            ChangeSensitivity((math.clamp((math.tan(math.rad(v2) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+                            repeat
+                                if v61 ~= v22 then
+                                    break
+                                end
+
+                                local v92 = tick() - v32
+
+                                CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (v2 - CurrentCamera.FieldOfView) * (v92 / v42)
+                                task.wait()
+                            until v42 < v92
+                        end)
+                    end
+
+                    if not (v13.FocusOnSight2 or v7:GetAttribute("FocusOnSight2")) then
+                        return
+                    end
+                else
+                    if v36 ~= 2 then
+                        return
+                    end
+
+                    v36 = 1
+
+                    if v7:GetAttribute("ChangeFOV") then
+                        local X = v7:GetAttribute("ChangeFOV").X
+                        local v4 = 120
+
+                        task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), v4 (copy), v68 (ref), X (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+                            v61 = if v61 then v61 + 1 or 0 else 0
+
+                            local v22 = v61
+                            local v32 = tick()
+                            local v42 = v4 / 90
+                            local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+                            ChangeSensitivity((math.clamp((math.tan(math.rad(X) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+                            repeat
+                                if v61 ~= v22 then
+                                    break
+                                end
+
+                                local v92 = tick() - v32
+
+                                CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (X - CurrentCamera.FieldOfView) * (v92 / v42)
+                                task.wait()
+                            until v42 < v92
+                        end)
+                    else
+                        local v5 = v13.ChangeFOV[1]
+                        local v6 = 120
+
+                        task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), v6 (copy), v68 (ref), v5 (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+                            v61 = if v61 then v61 + 1 or 0 else 0
+
+                            local v22 = v61
+                            local v32 = tick()
+                            local v42 = v6 / 90
+                            local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+                            ChangeSensitivity((math.clamp((math.tan(math.rad(v5) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+                            repeat
+                                if v61 ~= v22 then
+                                    break
+                                end
+
+                                local v92 = tick() - v32
+
+                                CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (v5 - CurrentCamera.FieldOfView) * (v92 / v42)
+                                task.wait()
+                            until v42 < v92
+                        end)
+                    end
+
+                    if not (v13.FocusOnSight or v7:GetAttribute("FocusOnSight")) then
+                        return
+                    end
+                end
+            elseif v36 == 1 then
+                v36 = 2
+
+                if v7:GetAttribute("ChangeFOV") then
+                    local Y = v7:GetAttribute("ChangeFOV").Y
+                    local v72 = 120
+
+                    task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), v72 (copy), v68 (ref), Y (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+                        v61 = if v61 then v61 + 1 or 0 else 0
+
+                        local v22 = v61
+                        local v32 = tick()
+                        local v42 = v72 / 90
+                        local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+                        ChangeSensitivity((math.clamp((math.tan(math.rad(Y) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+                        repeat
+                            if v61 ~= v22 then
+                                break
+                            end
+
+                            local v92 = tick() - v32
+
+                            CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (Y - CurrentCamera.FieldOfView) * (v92 / v42)
+                            task.wait()
+                        until v42 < v92
+                    end)
+                else
+                    local v82 = v13.ChangeFOV[2]
+                    local v9 = 120
+
+                    task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), v9 (copy), v68 (ref), v82 (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+                        v61 = if v61 then v61 + 1 or 0 else 0
+
+                        local v22 = v61
+                        local v32 = tick()
+                        local v42 = v9 / 90
+                        local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+                        ChangeSensitivity((math.clamp((math.tan(math.rad(v82) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+                        repeat
+                            if v61 ~= v22 then
+                                break
+                            end
+
+                            local v92 = tick() - v32
+
+                            CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (v82 - CurrentCamera.FieldOfView) * (v92 / v42)
+                            task.wait()
+                        until v42 < v92
+                    end)
+                end
+
+                if not (v13.FocusOnSight2 or v7:GetAttribute("FocusOnSight2")) then
+                    return
+                end
+            else
+                if v36 ~= 2 then
+                    return
+                end
+
+                v36 = 1
+
+                if v7:GetAttribute("ChangeFOV") then
+                    local X = v7:GetAttribute("ChangeFOV").X
+                    local v10 = 120
+
+                    task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), v10 (copy), v68 (ref), X (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+                        v61 = if v61 then v61 + 1 or 0 else 0
+
+                        local v22 = v61
+                        local v32 = tick()
+                        local v42 = v10 / 90
+                        local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+                        ChangeSensitivity((math.clamp((math.tan(math.rad(X) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+                        repeat
+                            if v61 ~= v22 then
+                                break
+                            end
+
+                            local v92 = tick() - v32
+
+                            CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (X - CurrentCamera.FieldOfView) * (v92 / v42)
+                            task.wait()
+                        until v42 < v92
+                    end)
+                else
+                    local v11 = v13.ChangeFOV[1]
+                    local v12 = 120
+
+                    task.spawn(function() --[[ Line: 498 | Upvalues: v61 (ref), v12 (copy), v68 (ref), v11 (copy), ChangeSensitivity (ref), CurrentCamera (ref) ]]
+                        v61 = if v61 then v61 + 1 or 0 else 0
+
+                        local v22 = v61
+                        local v32 = tick()
+                        local v42 = v12 / 90
+                        local v522 = if v68 == Enum.UserInputType.Touch then 1.4 else 1
+
+                        ChangeSensitivity((math.clamp((math.tan(math.rad(v11) / 2) / 0.7002075382097097 - 1) * v522 + 1, 0.04, 1)))
+
+                        repeat
+                            if v61 ~= v22 then
+                                break
+                            end
+
+                            local v92 = tick() - v32
+
+                            CurrentCamera.FieldOfView = CurrentCamera.FieldOfView + (v11 - CurrentCamera.FieldOfView) * (v92 / v42)
+                            task.wait()
+                        until v42 < v92
+                    end)
+                end
+
+                if not (v13.FocusOnSight or v7:GetAttribute("FocusOnSight")) then
+                    return
+                end
+            end
+
+            if v49 then
+                t8.AimShow:Play()
+            else
+                t8.AimHide:Play()
+            end
+
+            return
+        end
+
+        if v36 == 1 then
+            v36 = 2
+
+            if not (v13.FocusOnSight2 or v7:GetAttribute("FocusOnSight2")) then
+                return
+            end
+
+            if v49 then
+                t8.AimShow:Play()
+            else
+                t8.AimHide:Play()
+            end
+
+            return
+        end
+
+        if v36 ~= 2 then
+            return
+        end
+
+        v36 = 1
+
+        if not (v13.FocusOnSight or v7:GetAttribute("FocusOnSight")) then
+            return
+        end
+
+        if v49 then
+            t8.AimShow:Play()
+
+            return
+        end
+
+        t8.AimHide:Play()
+    end
+    v34:WaitForChild("Mobile"):WaitForChild("Fire").MouseButton1Down:Connect(function() --[[ Line: 2794 | Upvalues: v68 (ref), UserInputService (copy), v45 (ref), fireGun (copy) ]]
+        v68 = UserInputService:GetLastInputType()
+
+        if v68 ~= Enum.UserInputType.Touch then
+            return
+        end
+
+        v45 = true
+        fireGun(nil)
+    end)
+    v34:WaitForChild("Mobile"):WaitForChild("Fire").MouseButton1Up:Connect(function() --[[ Line: 2803 | Upvalues: v68 (ref), UserInputService (copy), v16 (ref), v44 (ref), v45 (ref) ]]
+        v68 = UserInputService:GetLastInputType()
+
+        if v68 ~= Enum.UserInputType.Touch or not v16 then
+            return
+        end
+
+        v44 = false
+        v45 = false
+    end)
+    v34:WaitForChild("Mobile"):WaitForChild("Reload").InputBegan:Connect(reloadGun)
+    v34:WaitForChild("Mobile"):WaitForChild("Aim").InputBegan:Connect(function() --[[ Line: 2816 | Upvalues: v68 (ref) ]]
+        aimGun(v68)
+    end)
+    v34:WaitForChild("Mobile"):WaitForChild("ScopeSwap").InputBegan:Connect(swapGunScope)
+    v34:WaitForChild("Mobile"):WaitForChild("FireMode").InputBegan:Connect(changeFireMode)
+end
+
+local v99 = 0
+local v100 = RaycastParams.new()
+
+v100.FilterType = Enum.RaycastFilterType.Exclude
+
+local v101 = nil
+local v102 = nil
+local v103 = 0
+local t9 = {}
+
+local function autoFire(p1) --[[ autoFire | Line: 2837 | Upvalues: v68 (ref), v103 (ref), t9 (ref), v7 (ref), v8 (ref), v13 (ref), UserInputService (copy), v100 (copy), Character (copy), v56 (ref), v57 (ref), CurrentCamera (copy), v102 (ref), Players (copy), v99 (ref), fireGun (copy), v45 (ref), v44 (ref) ]]
+    if v68 ~= Enum.UserInputType.Touch then
+        return
+    end
+
+    if v103 > 60 then
+        v103 = 0
+        t9 = {}
+    else
+        v103 = v103 + p1
+    end
+
+    if not (v7 and v8) then
+        return
+    end
+
+    if v13.Mode == "RPG" or v13.GunType == 3 then
+        return
+    end
+
+    v68 = UserInputService:GetLastInputType()
+
+    local t = {}
+
+    t[1] = v8
+    t[2] = v7
+    t[3] = Character
+    t[4] = v56
+    t[5] = v57
+    t[6] = CurrentCamera
+    t[7] = unpack(t9)
+    v100.FilterDescendantsInstances = t
+
+    local v3 = workspace:Raycast(CurrentCamera.CFrame.Position, CurrentCamera.CFrame.LookVector * 300, v100)
+
+    if v3 then
+        if v3.Instance.CanCollide == false and v3.Instance.Transparency == 1 then
+            table.insert(t9, v3.Instance)
+
+            return
+        end
+
+        local v6 = v3.Instance:FindFirstAncestorOfClass("Model")
+        local v72 = if v6 then v6:FindFirstChild("Humanoid") else v6
+
+        if v72 and (v72.Health > 0 and (not v6:FindFirstChildOfClass("Forcefield") and (not v102 or v72 == v102))) then
+            if not Players:GetPlayerFromCharacter(v6) then
+                return
+            end
+
+            v102 = v72
+            v99 = v99 + p1
+
+            if v99 > 0.2 or (v13.Mode == "Auto" or v13.Mode == "Pump-Action") then
+                fireGun()
+            end
+        else
+            v99 = 0
+            v102 = nil
+
+            if not v45 then
+                v44 = false
+            end
+        end
+    else
+        v99 = 0
+        v102 = nil
+
+        if v45 then
+            return
+        end
+
+        v44 = false
+    end
+end
+
+local autoFire2 = LocalPlayer.SettingsFolder:FindFirstChild("autoFire")
+
+local function connectAutoFire() --[[ connectAutoFire | Line: 2912 | Upvalues: v101 (ref), autoFire2 (copy), RunService (copy), autoFire (copy) ]]
+    if v101 then
+        return
+    end
+
+    if autoFire2.Value == true then
+        v101 = RunService.Heartbeat:Connect(function(p1) --[[ Line: 2921 | Upvalues: autoFire (ref) ]]
+            autoFire(p1)
+        end)
+    end
+end
+
+local function disconnectAutoFire() --[[ disconnectAutoFire | Line: 2926 | Upvalues: v101 (ref) ]]
+    if not v101 then
+        return
+    end
+
+    v101:Disconnect()
+    v101 = nil
+end
+
+if autoFire2 then
+    autoFire2.Changed:Connect(function() --[[ Line: 2934 | Upvalues: autoFire2 (copy), v16 (ref), connectAutoFire (ref), disconnectAutoFire (ref) ]]
+        if autoFire2.Value == true and v16 then
+            connectAutoFire()
+        else
+            disconnectAutoFire()
+        end
+    end)
+end
+
+UserInputService.InputBegan:Connect(function(p1, p2) --[[ Line: 2944 | Upvalues: v72 (ref), v73 (ref), HapticService (copy), v74 (ref), v45 (ref), fireGun (copy), v16 (ref), v50 (ref), vibrateController (copy), swapGunScope (copy), v13 (ref), changeFireMode (copy) ]]
+    if p2 then
+        return
+    end
+
+    v72 = p1
+    v73 = HapticService:IsVibrationSupported(p1.UserInputType)
+
+    if v73 then
+        v74 = HapticService:IsMotorSupported(p1.UserInputType, Enum.VibrationMotor.Large)
+    end
+
+    if p1.KeyCode == Enum.KeyCode.ButtonR2 or p1.UserInputType == Enum.UserInputType.MouseButton1 then
+        v45 = true
+        fireGun(p1)
+    end
+
+    if p1.KeyCode == Enum.KeyCode.ButtonL2 or p1.UserInputType == Enum.UserInputType.MouseButton2 then
+        aimGun(p1)
+    end
+
+    if (p1.KeyCode == Enum.KeyCode.ButtonX or p1.KeyCode == Enum.KeyCode.R) and v16 then
+        reloadGun()
+    end
+
+    if (p1.KeyCode == Enum.KeyCode.ButtonY or p1.KeyCode == Enum.KeyCode.F) and (v16 and not v50) then
+        chamberGun()
+    end
+
+    if (p1.KeyCode == Enum.KeyCode.DPadUp or p1.KeyCode == Enum.KeyCode.T) and v16 then
+        if v73 then
+            coroutine.wrap(vibrateController)(p1, Enum.VibrationMotor.Small, math.random(100, 200) / 1000, 0.1)
+        end
+
+        swapGunScope()
+    end
+
+    if p1.KeyCode ~= Enum.KeyCode.DPadDown and p1.KeyCode ~= Enum.KeyCode.V then
+        return
+    end
+
+    if not (v16 and v13.FireModes.ChangeFiremode) then
+        return
+    end
+
+    if v73 then
+        coroutine.wrap(vibrateController)(p1, Enum.VibrationMotor.Small, math.random(100, 200) / 1000, 0.1)
+    end
+
+    changeFireMode()
+end)
+Humanoid.Died:connect(function() --[[ Line: 2993 | Upvalues: v73 (ref), v74 (ref), vibrateController (copy), v72 (ref), ResetWorkspace (copy), Humanoid (copy), Unset (copy), v97 (ref), t3 (ref) ]]
+    if v73 and v74 then
+        coroutine.wrap(vibrateController)(v72, Enum.VibrationMotor.Large, math.random(800, 1100) / 1000, 0.2)
+    elseif v73 then
+        coroutine.wrap(vibrateController)(v72, Enum.VibrationMotor.Small, math.random(800, 1100) / 1000, 0.2)
+    end
+
+    ResetWorkspace()
+    Humanoid:UnequipTools()
+    Unset()
+    v97:Disconnect()
+
+    for k, v in pairs(t3) do
+        v:disconnect()
+    end
+
+    t3 = {}
+end)
+
+local v104 = true
+
+task.delay(5, function() --[[ Line: 3019 | Upvalues: v104 (ref) ]]
+    v104 = false
+end)
+PreventFallDamageBindableEvent.Event:Connect(function(p1) --[[ Line: 3023 | Upvalues: v104 (ref) ]]
+    v104 = true
+    task.delay(p1, function() --[[ Line: 3025 | Upvalues: v104 (ref) ]]
+        v104 = false
+    end)
+end)
+
+local function onStateChanged(p1, p2) --[[ onStateChanged | Line: 3030 | Upvalues: v17 (ref), v16 (ref), v13 (ref), Unset (copy), Humanoid2 (copy), v38 (ref), HumanoidRootPart (copy), Config (copy), LocalPlayer (copy), v104 (ref), Humanoid (copy), DebrisGobbler (copy), v48 (ref), Events (copy), v73 (ref), v74 (ref), vibrateController (copy), v72 (ref) ]]
+    if p2 == Enum.HumanoidStateType.Swimming then
+        v17 = true
+
+        if v16 and not v13.AllowedInWater then
+            Unset()
+            Humanoid2:UnequipTools()
+        end
+    else
+        v17 = false
+    end
+
+    if p2 == Enum.HumanoidStateType.Freefall and not v38 then
+        v38 = true
+
+        local count = 0
+        local v1 = 0
+
+        while v38 do
+            v1 = HumanoidRootPart.Velocity.magnitude
+            task.wait()
+            count = count + 1
+        end
+
+        local v2 = (v1 - Config.MaxVelocity) * Config.DamageMult
+
+        if not (v2 > 5) or (not (count > 20) or (LocalPlayer.Team.Name == "Loading" or v104 ~= false)) then
+            return
+        end
+
+        local Sound = Instance.new("Sound")
+
+        Sound.SoundId = "rbxassetid://13592161628"
+        Sound.Volume = math.clamp(v2 / Humanoid.MaxHealth, 0, 0.5)
+        Sound.Parent = LocalPlayer.PlayerGui
+        Sound:Play()
+        DebrisGobbler:AddItem(Sound, Sound.TimeLength + 2)
+        task.spawn(function() --[[ Line: 3061 | Upvalues: v48 (ref), Events (ref) ]]
+            local v1 = false
+
+            task.delay(100, function() --[[ Line: 3064 | Upvalues: v1 (ref), v48 (ref) ]]
+                if v1 then
+                    return
+                end
+
+                v48 = true
+            end)
+            Events.FDMG.OnClientEvent:Wait()
+            v1 = true
+        end)
+        Events.FDMG:FireServer((math.clamp(v2, 5, 400)))
+
+        if v73 and v74 then
+            coroutine.wrap(vibrateController)(v72, Enum.VibrationMotor.Large, math.random(350, 600) / 1000, math.random(150, 200) / 1000)
+
+            return
+        end
+
+        if v73 then
+            coroutine.wrap(vibrateController)(v72, Enum.VibrationMotor.Small, math.random(350, 600) / 1000, math.random(150, 200) / 1000)
+        end
+    else
+        if p2 ~= Enum.HumanoidStateType.Landed and p2 ~= Enum.HumanoidStateType.Dead then
+            return
+        end
+
+        v38 = false
+    end
+end
+
+Humanoid.Seated:Connect(function(p1, p2) --[[ Line: 3098 | Upvalues: HelicopterNames (copy), PlaneNames (copy), UAVNames (copy), v104 (ref), Humanoid (copy) ]]
+    if p1 and p2 then
+        for v1, v2 in p2:GetFullName():split(".") do
+            if HelicopterNames[v2] or (PlaneNames[v2] or UAVNames[v2]) then
+                v104 = true
+
+                return
+            end
+        end
+    else
+        if v104 ~= true then
+            return
+        end
+
+        task.wait(0.75)
+
+        if Humanoid.Seated == true then
+            return
+        end
+
+        v104 = false
+    end
+end)
+Humanoid.StateChanged:connect(onStateChanged)
+function IdleAnim() --[[ IdleAnim | Line: 3126 | Upvalues: v14 (ref), Character (copy), v57 (ref), v54 (ref), v55 (ref), v56 (ref), v8 (ref), v52 (ref), v53 (ref), t4 (copy) ]]
+    local v1 = coroutine.create(function() --[[ Line: 3129 | Upvalues: v14 (ref), Character (ref), v57 (ref), v54 (ref), v55 (ref), v56 (ref), v8 (ref), v52 (ref), v53 (ref) ]]
+        v14.IdleAnim(Character, nil, {
+            v57,
+            v54,
+            v55,
+            v56.GripW,
+            v8,
+            v52,
+            v53
+        })
+    end)
+
+    coroutine.resume(v1)
+    table.insert(t4, v1)
+end
+function SprintAnim() --[[ SprintAnim | Line: 3145 | Upvalues: v41 (ref), v14 (ref), Character (copy), v57 (ref), v54 (ref), v55 (ref), v56 (ref), v8 (ref), v52 (ref), v53 (ref), t4 (copy) ]]
+    if not v41 then
+        local v1 = coroutine.create(function() --[[ Line: 3151 | Upvalues: v14 (ref), Character (ref), v57 (ref), v54 (ref), v55 (ref), v56 (ref), v8 (ref), v52 (ref), v53 (ref) ]]
+            v14.SprintAnim(Character, nil, {
+                v57,
+                v54,
+                v55,
+                v56.GripW,
+                v8,
+                v52,
+                v53
+            })
+        end)
+
+        coroutine.resume(v1)
+        table.insert(t4, v1)
+    end
+end
+function EquipAnim() --[[ EquipAnim | Line: 3167 | Upvalues: v16 (ref), v41 (ref), v40 (ref), v50 (ref), v14 (ref), Character (copy), v57 (ref), v54 (ref), v55 (ref), v56 (ref), v8 (ref), v52 (ref), v53 (ref), t4 (copy) ]]
+    if v16 == false then
+        return
+    end
+
+    local v1 = coroutine.create(function() --[[ Line: 3173 | Upvalues: v41 (ref), v40 (ref), v50 (ref), v14 (ref), Character (ref), v57 (ref), v54 (ref), v55 (ref), v56 (ref), v8 (ref), v52 (ref), v53 (ref) ]]
+        v41 = true
+        v40 = false
+        v50 = true
+        v14.EquipAnim(Character, nil, {
+            v57,
+            v54,
+            v55,
+            v56.GripW,
+            v8,
+            v52,
+            v53
+        })
+        v50 = false
+        v40 = true
+        v41 = false
+    end)
+
+    coroutine.resume(v1)
+    table.insert(t4, v1)
+
+    repeat
+        task.wait()
+    until v41 == false or not v1
+end
+function ChamberAnim(p1) --[[ ChamberAnim | Line: 3198 | Upvalues: v16 (ref), v41 (ref), bulletShells (copy), v8 (ref), t2 (copy), v7 (ref), v28 (ref), v14 (ref), Character (copy), v57 (ref), v54 (ref), v55 (ref), v56 (ref), v13 (ref), v53 (ref), v52 (ref), v39 (ref), t6 (copy), Update_Gui (copy), t4 (copy) ]]
+    if v16 == false then
+        return
+    end
+
+    local v1 = coroutine.create(function() --[[ Line: 3204 | Upvalues: v41 (ref), bulletShells (ref), v8 (ref), t2 (ref), v7 (ref), v28 (ref), v14 (ref), Character (ref), v57 (ref), v54 (ref), v55 (ref), v56 (ref), v13 (ref), v53 (ref), v52 (ref), p1 (copy), v39 (ref), t6 (ref), Update_Gui (ref) ]]
+        v41 = true
+
+        if bulletShells.Value == true then
+            local v1 = v8.Chamber:FindFirstChild("Shell") or v8.Chamber:FindFirstChild("ShellANIM")
+
+            if t2[v7] > 0 and (v28.Value == true and v1) then
+                task.delay(v1.Delay.Value, function() --[[ Line: 3210 | Upvalues: v1 (copy) ]]
+                    v1:Emit(1)
+                end)
+            end
+        end
+
+        local v2 = v28.Value
+
+        v28.Value = false
+        v14.ChamberAnim(Character, nil, {
+            v57,
+            v54,
+            v55,
+            v56.GripW,
+            v8,
+            v13,
+            v53,
+            v52
+        })
+
+        if t2[v7] > 0 and (v2 == true and not p1) then
+            local v3 = t2
+            local v4 = v7
+
+            v3[v4] = v3[v4] - 1
+        end
+
+        v39 = false
+
+        if t2[v7] >= 1 then
+            v28.Value = true
+        elseif not (p1 or table.find(t6, v8.Name)) then
+            v28.Value = false
+        end
+
+        Update_Gui(true)
+        v41 = false
+    end)
+
+    coroutine.resume(v1)
+    table.insert(t4, v1)
+
+    repeat
+        task.wait()
+    until v41 == false or not v1
+end
+function ChamberBKAnim() --[[ ChamberBKAnim | Line: 3254 | Upvalues: v41 (ref), v28 (ref), v14 (ref), Character (copy), v57 (ref), v54 (ref), v55 (ref), v56 (ref), v8 (ref), v13 (ref), v52 (ref), v53 (ref), v39 (ref), t2 (copy), v7 (ref), Update_Gui (copy), t4 (copy) ]]
+    local v1 = coroutine.create(function() --[[ Line: 3256 | Upvalues: v41 (ref), v28 (ref), v14 (ref), Character (ref), v57 (ref), v54 (ref), v55 (ref), v56 (ref), v8 (ref), v13 (ref), v52 (ref), v53 (ref), v39 (ref), t2 (ref), v7 (ref), Update_Gui (ref) ]]
+        v41 = true
+        v28.Value = false
+        v14.ChamberBKAnim(Character, nil, {
+            v57,
+            v54,
+            v55,
+            v56.GripW,
+            v8,
+            v13,
+            v52,
+            v53
+        })
+        v39 = false
+
+        if not (t2[v7] > 0) then
+            v41 = false
+            Update_Gui(true)
+
+            return
+        end
+
+        v28.Value = true
+        v41 = false
+        Update_Gui(true)
+    end)
+
+    coroutine.resume(v1)
+    table.insert(t4, v1)
+
+    repeat
+        task.wait()
+    until v41 == false or not v1
+end
+function ShellInsertAnim() --[[ ShellInsertAnim | Line: 3286 | Upvalues: v41 (ref), v14 (ref), Character (copy), v57 (ref), v54 (ref), v55 (ref), v56 (ref), v8 (ref), v13 (ref), v28 (ref), v52 (ref), v53 (ref), t4 (copy) ]]
+    local v1 = coroutine.create(function() --[[ Line: 3288 | Upvalues: v41 (ref), v14 (ref), Character (ref), v57 (ref), v54 (ref), v55 (ref), v56 (ref), v8 (ref), v13 (ref), v28 (ref), v52 (ref), v53 (ref) ]]
+        v41 = true
+        v14.ShellInsertAnim(Character, nil, {
+            v57,
+            v54,
+            v55,
+            v56.GripW,
+            v8,
+            nil,
+            nil,
+            v13,
+            v28,
+            v52,
+            v53
+        })
+        v41 = false
+    end)
+
+    coroutine.resume(v1)
+    table.insert(t4, v1)
+
+    repeat
+        task.wait()
+    until v41 == false or not v1
+end
+function ReloadAnim() --[[ ReloadAnim | Line: 3314 | Upvalues: v41 (ref), v13 (ref), v33 (ref), v7 (ref), Update_Gui (copy), v14 (ref), Character (copy), v57 (ref), v54 (ref), v55 (ref), v56 (ref), v8 (ref), t2 (copy), v28 (ref), v52 (ref), v53 (ref), t4 (copy) ]]
+    if v41 then
+        warn("anim deb")
+
+        return
+    end
+
+    local v1 = coroutine.create(function() --[[ Line: 3320 | Upvalues: v13 (ref), v33 (ref), v7 (ref), Update_Gui (ref), v41 (ref), v14 (ref), Character (ref), v57 (ref), v54 (ref), v55 (ref), v56 (ref), v8 (ref), t2 (ref), v28 (ref), v52 (ref), v53 (ref) ]]
+        if v13 and v13.Cooldown then
+            v33.AmmoText.Text = "Cooldown"
+
+            local v1 = v7:GetAttribute("Cooldown") or v13.Cooldown
+            local v2 = v7:GetAttribute("LastCooldownTick") or tick()
+            local v4 = math.round(v1 - (tick() - v2))
+
+            if v4 > 0 then
+                for i = v4, 0, -1 do
+                    v7:SetAttribute("Cooldown", i)
+                    v7:SetAttribute("LastCooldownTick", tick())
+                    v33.AmmoTextSecondary.Text = "- " .. i
+                    task.wait(1)
+                end
+
+                v7:SetAttribute("Cooldown", nil)
+                v7:SetAttribute("LastCooldownTick", nil)
+            else
+                v7:SetAttribute("Cooldown", nil)
+                v7:SetAttribute("LastCooldownTick", nil)
+                Update_Gui(true)
+            end
+        else
+            v41 = true
+            v14.ReloadAnim(Character, nil, {
+                v57,
+                v54,
+                v55,
+                v56.GripW,
+                v8,
+                nil,
+                t2[v7],
+                v13,
+                v28,
+                v52,
+                v53
+            })
+        end
+
+        task.wait()
+
+        local v5 = v7:GetAttribute("Ammo") or v13.Ammo
+
+        if v13.ReloadType == 1 then
+            if t2[v7] > 0 and v13.IncludeChamberedBullet == true then
+                t2[v7] = v5 + 1
+            else
+                t2[v7] = v5
+            end
+        elseif v13.ReloadType == 2 and t2[v7] < v5 then
+            local v6 = t2
+            local v72 = v7
+
+            v6[v72] = v6[v72] + 1
+        end
+
+        Update_Gui(true)
+        v41 = false
+    end)
+
+    coroutine.resume(v1)
+    table.insert(t4, v1)
+
+    repeat
+        task.wait()
+    until v41 == false or not v1
+end
