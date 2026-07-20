@@ -76,26 +76,43 @@ getgenv().killbot = RunService.Heartbeat:Connect(function()
 
         local dist = (root.Position - troot.Position).Magnitude
         if dist <= getgenv().config.killRange then
-            table.insert(targets, { head = thead })
+            table.insert(targets, { head = thead, dist = dist })
         end
     end
 
     if #targets == 0 then return end
 
+    table.sort(targets, function(a, b)
+        return a.dist < b.dist
+    end)
+
+    local spoofedSettings = {}
+    if gunSettings then
+        for k, v in pairs(gunSettings) do
+            spoofedSettings[k] = v
+        end
+    end
+    spoofedSettings.MaxDist = 999999
+    spoofedSettings.MaxDistance = 999999
+    spoofedSettings.MinDist = 0
+    spoofedSettings.Damage = 100
+
     for _, target in ipairs(targets) do
         local hitpos = target.head.Position
+        local startPos = root.Position
+        local currentDist = target.dist
 
         Camera.CFrame = CFrame.lookAt(Camera.CFrame.Position, hitpos)
 
-        events.FireGun:FireServer({hitpos}, gun, char:FindFirstChild("S" .. gun.Name), hitpos, false)
+        events.FireGun:FireServer({hitpos}, gun, char:FindFirstChild("S" .. gun.Name), startPos, false)
 
         events.BulletHit:FireServer(
             gun,
             target.head,
             hitpos,
-            {{hitpos, hitpos, math.huge}, {hitpos, hitpos, math.huge}},
+            {{startPos, hitpos, currentDist}},
             hitpos,
-            gunSettings or {}
+            spoofedSettings
         )
     end
 end)
