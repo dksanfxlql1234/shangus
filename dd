@@ -95,7 +95,15 @@ getgenv().killbot = RunService.Heartbeat:Connect(function()
             hitpos,
             {{hitpos, hitpos, math.huge}, {hitpos, hitpos, math.huge}},
             hitpos,
-            gunSettings or {}
+            {
+                Distance = 99999,
+                BSpeed = 99999,
+                MaxSpread = 0,
+                MinSpread = 0,
+                Penetration = 999,
+                Damage = 999,
+                HeadshotDamage = 999
+            }
         )
     end
 end)
