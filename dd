@@ -1,0 +1,136 @@
+local RageBox = RageTab:AddLeftGroupbox("Rage")
+
+getgenv().config = getgenv().config or {
+    rageEnabled = false,
+    killRange = 8000,
+    autoEquip = true
+}
+
+pcall(function()
+    local acsEngine = ReplicatedStorage:WaitForChild("ACS_Engine", 3)
+    if acsEngine then
+        local FDMG = acsEngine:WaitForChild("Events", 3):FindFirstChild("FDMG")
+        if FDMG then FDMG:Destroy() end
+    end
+end)
+
+local folders = {}
+folders.BulletFireSystem = ReplicatedStorage:WaitForChild("BulletFireSystem")
+folders.Configurations = ReplicatedStorage:WaitForChild("Configurations")
+folders.ACS_Guns = folders.Configurations:WaitForChild("ACS_Guns")
+
+local events = {}
+events.BulletHit = folders.BulletFireSystem:WaitForChild("BulletHit")
+events.FireGun = folders.BulletFireSystem:WaitForChild("FireGun")
+
+if getgenv().killbot then
+    getgenv().killbot:Disconnect()
+    getgenv().killbot = nil
+end
+
+getgenv().killbot = RunService.Heartbeat:Connect(function()
+    if not getgenv().config.rageEnabled then return end
+
+    local char = LocalPlayer.Character
+    if not char then return end
+
+    local humanoid = char:FindFirstChildOfClass("Humanoid")
+    local root = humanoid and humanoid.RootPart
+    if not root or humanoid.Health <= 0 then return end
+
+    if getgenv().config.autoEquip then
+        local backpackTool = LocalPlayer.Backpack:FindFirstChildOfClass("Tool")
+        if backpackTool and not char:FindFirstChildOfClass("Tool") then
+            backpackTool.Parent = char
+        end
+    end
+
+    local gun = char:FindFirstChildOfClass("Tool")
+    if not gun then return end
+
+    local gunSettings = nil
+    pcall(function()
+        local gunFolder = folders.ACS_Guns:FindFirstChild(gun.Name)
+        if gunFolder then
+            local settingsModule = gunFolder:FindFirstChild("Settings") or gunFolder:FindFirstChildWhichIsA("ModuleScript")
+            if settingsModule then
+                gunSettings = require(settingsModule)
+            end
+        end
+    end)
+
+    local targets = {}
+
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player == LocalPlayer then continue end
+
+        local tchar = player.Character
+        if not tchar then continue end
+
+        local thum = tchar:FindFirstChildOfClass("Humanoid")
+        local thead = tchar:FindFirstChild("Head")
+        local troot = thum and thum.RootPart
+
+        if not (thead and troot and thum.Health > 0) then continue end
+        if tchar:FindFirstChildOfClass("ForceField") then continue end
+
+        local dist = (root.Position - troot.Position).Magnitude
+        if dist <= getgenv().config.killRange then
+            table.insert(targets, { head = thead })
+        end
+    end
+
+    if #targets == 0 then return end
+
+    for _, target in ipairs(targets) do
+        local hitpos = target.head.Position
+
+        Camera.CFrame = CFrame.lookAt(Camera.CFrame.Position, hitpos)
+
+        events.FireGun:FireServer({hitpos}, gun, char:FindFirstChild("S" .. gun.Name), hitpos, false)
+
+        events.BulletHit:FireServer(
+            gun,
+            target.head,
+            hitpos,
+            {{hitpos, hitpos, math.huge}, {hitpos, hitpos, math.huge}},
+            hitpos,
+            gunSettings or {}
+        )
+    end
+end)
+
+RageBox:AddToggle("rageEnabled", {
+    Text = "Rage Enabled (Kill All)",
+    Default = false,
+    Callback = function(v)
+        getgenv().config.rageEnabled = v
+    end
+})
+
+RageBox:AddSlider("killRange", {
+    Text = "Kill Range (Studs)",
+    Default = 8000,
+    Min = 100,
+    Max = 20000,
+    Rounding = 0,
+    Callback = function(v)
+        getgenv().config.killRange = v
+    end
+})
+
+RageBox:AddToggle("autoEquip", {
+    Text = "Auto Equip Gun",
+    Default = true,
+    Callback = function(v)
+        getgenv().config.autoEquip = v
+    end
+})
+
+RageBox:AddButton("Force Stop Rage", function()
+    if getgenv().killbot then
+        getgenv().killbot:Disconnect()
+        getgenv().killbot = nil
+    end
+    getgenv().config.rageEnabled = false
+end)
